@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header_css %}
+{% endblock header_css %}
+{% block content %}
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'dashboard_tasks' %}">Tasks</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Query tasks</li>
+            </ol>
+          </nav>
+
+          <div class="row d-flex justify-content-center mt-2 mb-2">
+
+            <form action="{% url 'filter_todo' %}" method="POST">
+              {% csrf_token %}
+              <div class="form-row align-items-center">
+                <div class="col-auto">
+                  <label class="sr-only" for="inlineFormInput">Query</label>
+                  <input type="text" class="form-control mb-2" name="query" id="inlineFormInput" placeholder="Search">
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary mb-2">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {% if query %}
+
+          <div class="row d-flex justify-content-center">
+            <h4>Search Results for : {{query}}</h4>
+          </div>
+          {% endif %}
+
+
+
+          <!-- Content Row -->
+          {% if tasks %}
+          <div class="row mt-2 mb-2">
+            <div class="col-md-8 col-sm-12 offset-md-2">
+              {% include 'card/todo.html' %}
+              
+            </div>
+          </div>
+          {% endif %}
+
+          
+
+
+        </div>
+        <!-- /.container-fluid -->
+
+
+ 
+{% endblock content %}
+{% block modal %}
+
+{% endblock modal %}
+
+{% block body_script %}
+<!-- <script>
+    $( '#todoaccordionpending' ).searchable({
+        searchField: '#todo-search-pending',
+        selector: '.card',
+        childSelector: 'p',
+        show: function( elem ) {
+            elem.slideDown(100);
+        },
+        hide: function( elem ) {
+            elem.slideUp( 100 );
+        }
+    })
+</script>  -->
+
+{% endblock body_script %}
+{% block footer %}
+{% endblock footer %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+              <li class="breadcrumb-item active" aria-current="page">CallBackSupport</li>
+            </ol>
+          </nav>
+
+
+            
+  
+            <!-- Content Row -->
+            <div class="row">
+              <div class="container-fluid">
+                  <!-- Page Heading -->
+                    <!-- <p class="mb-4 text-right">
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        <a href="#" data-toggle="modal" data-target="#newBrandForm" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-edit fa-sm text-white-50"></i> New Brand </a>
+                        <a href="#" data-toggle="modal" data-target="#newUnitForm" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-edit fa-sm text-white-50"></i> New Unit</a>
+                        <a href="#" data-toggle="modal" data-target="#newProjectForm" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-edit fa-sm text-white-50"></i> New Project</a>
+                    </p> -->
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3 col-sm-8 offset-sm-2 col-xs-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                  <h6 class="m-0 font-weight-bolder text-primary "> Support Member
+                                 
+                                  <div class="float-right">
+                                         <a href="{% url 'add_callback_support_member' %}" data-toggle="modal" data-title="Add New Member" data-target="#CallBackForm" class="btn btn-sm btn-primary">Add Member</a>
+                          
+                                    </div>
+                                </h6>
+                                </div>
+                              
+                                <div class="card-body">
+                                    {% for member in members %}
+                                    
+                                        
+                                            <div class="row mb-2 border-bottom-light">
+                                                <div class="col-2">
+                                                    
+                                                </div>
+                                                <div class="col-6">
+                                                    <a href="${msg.data.url}">
+                                                    <div class=" mt-0 mb-0 text-gray-900 font-weight-bold">{{member.user.name}}</div>     
+                                                    </a>
+                                                </div>
+                                                <div class="col-4">
+                                                    <a href="{% url 'callback_support_remove' member.id %}" class="ajax-get btn btn-sm btn-outline-danger"> Delete </a>
+                                                </div>            
+                                            </div>
+                                  
+                               
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+  
+          </div>
+          <!-- /.container-fluid -->
+
+{% endblock content %}

@@ -1,0 +1,134 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold er text-primary">Unit Details
+      </h6>
+    </div>
+    <div class="card-body">
+      <div class="accordion" id="unitdetailaccordion">
+        {% for unit in units %}
+        <div class="card  border border-primary mb-2">
+          <div class="card-header bg-default" id="callreport{{forloop.counter|default:"" }}e">
+            <div class="row d-flex justify-content-center" data-toggle="collapse" data-target="#collapseunitdetails{{forloop.counter|default:"" }}" aria-expanded="true"
+              aria-controls="collapseunitdetails{{forloop.counter|default:"" }}">
+                <p class="font-weight-bolder text-center">{{unit.name|default:"" }}</h6>
+            </div>
+          </div>
+          <div id="collapseunitdetails{{forloop.counter|default:"" }}" class="collapse" aria-labelledby="callreport{{forloop.counter|default:"" }}"
+            data-parent="#unitdetailaccordion">
+            <div class="card-body text-center">
+              <div class="row border-bottom mb-1">
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Name</div>
+                    <div class="col-6">{{unit.name|default:"" }}</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Floor</div>
+                    <div class="col-6">{{unit.floor|default:"" }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-bottom mb-1">
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Sales Amount</div>
+                    <div class="col-6">{{unit.sales_amount|default:"" }}</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Load</div>
+                    <div class="col-6">{{unit.load|default:"" }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-bottom mb-1">
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">LC</div>
+                    <div class="col-6">{{unit.lc|default:"" }}</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Lc Payment</div>
+                    <div class="col-6">{{unit.lc_payment|default:"" }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-bottom mb-1">
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Unit Type</div>
+                    <div class="col-6">{{unit.get_unit_type_display|default:"" }}</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Room Type</div>
+                    <div class="col-6">{{unit.get_room_type_display|default:"" }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-bottom mb-1">
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Drawing</div>
+                    <div class="col-6">{{unit.drawing|default:"" }}</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Shipment</div>
+                    <div class="col-6">{{unit.shipment|default:"" }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-bottom mb-1">
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Mechanical Work</div>
+                    <div class="col-6">{{unit.mechanical_work|default:"" }}</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6 font-weight-bold">Commissioning Work</div>
+                    <div class="col-6">{{unit.commissioning_work|default:"" }}</div>
+                  </div>
+                </div>
+              </div>
+             <div class="row border-bottom mb-1">
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-6 font-weight-bold">Final Payment</div>
+                  <div class="col-6">{{unit.final_payment|default:"" }}</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-6 font-weight-bold">Handover</div>
+                  <div class="col-6">{{unit.handover|default:"" }}</div>
+                </div>
+              </div>
+             </div>
+              
+              
+              
+                
+             
+            
+
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+        
+      </div>
+
+
+    </div>
+  </div>

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+
+
+{% block header_css %}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+<script src="https://scripts.sandbox.bka.sh/versions/1.1.0-beta/checkout/bKash-checkout-sandbox.js"></script>
+{% endblock header_css %}
+
+{% block content %}
+
+bkash
+
+<button id="bKash_button">Pay with bKash</button>
+
+{% endblock content %}
+{% block body_script %}
+
+<script>
+    var paymentID = ''; 
+bKash.init({ 
+  paymentMode: 'checkout', //fixed value ‘checkout’ 
+  //paymentRequest format: {amount: AMOUNT, intent: INTENT} 
+  //intent options 
+  //1) ‘sale’ – immediate transaction (2 API calls) 
+  //2) ‘authorization’ – deferred transaction (3 API calls) 
+  paymentRequest: { 
+    amount: '100.50', //max two decimal points allowed 
+    intent: 'sale' 
+  }, 
+  
+  createRequest: function(request) { //request object is basically the paymentRequest object, automatically pushed by the script in createRequest method 
+    $.ajax({ 
+    //   url: "{% url 'payment_create_api_view' %}",
+     url: "https://merchantserver.sandbox.bka.sh/api/checkout/v1.2.0-beta/payment/create",
+      type: 'POST', 
+      contentType: 'application/json',  
+      success: function(data) { 
+        console.log(data)
+        data = JSON.parse(data);
+
+        if (data && data.paymentID != null) { 
+          paymentID = data.paymentID; 
+          bKash.create().onSuccess(data); //pass the whole response data in bKash.create().onSucess() method as a parameter 
+        } else { 
+          bKash.create().onError(); 
+        } 
+      }, 
+      error: function() { 
+        bKash.create().onError(); 
+      } 
+    }); 
+  },
+  executeRequestOnAuthorization: function() { 
+    $.ajax({ 
+      url: "{% url 'payment_execute_api_view' %}", 
+      type: 'POST', 
+      contentType: 'application/json', 
+      data: JSON.stringify({ 
+        "paymentID": paymentID 
+      }), 
+      success: function(data) { 
+        data = JSON.parse(data);
+        if (data && data.paymentID != null) { 
+          window.location.href = "success.html";//Merchant’s success page 
+        } else { 
+          bKash.execute().onError(); 
+        } 
+      }, 
+      error: function() { 
+        bKash.execute().onError(); 
+      } 
+    }); 
+  } 
+});
+// bKash.init({
+
+
+// //options -
+// //1) 'checkout' : Performs a single checkout.
+// paymentMode: 'checkout',
+
+// //paymentRequest format : { amount: _AMOUNT, intent: _INTENT };
+// //intent : sale - immediate trx
+// //intent : authorization - needs an additional 'Capture' call for trx
+// //max two decimal points allowed in amount value.
+// //paymentRequest will be ignored for paymentMode 'addWalletOnly'. Just keep it as blank object (paymentRequest:{})
+// paymentRequest: { amount: '100.50', intent: 'sale' },
+
+// createRequest: function (request) {
+
+
+//     //CALL YOUR BACKEND'S CREATE METHOD HERE
+//     //IF THE CALL IS SUCCESSFUL, SEND THE CREATE RESPONSE DATA IN bKash.create().onSuccess() METHOD
+//         bKash.create().onSuccess();
+//     //ELSE, CALL bKash.create().onError() METHOD. bKash will run it's clean up code from there
+//         bKash.create().onError();
+
+// },
+// executeRequestOnAuthorization: function () {
+
+
+//     //CALL YOUR BACKEND'S EXECUTE METHOD HERE
+//     //IF THE CALL IS SUCCESSFUL, DISPLAY YOUR SUCCESS PAGE
+//         window.location.href = "your_success_page.html";
+//     //ELSE, CALL bKash.execute().onError() METHOD. bKash will run it's clean up code from there
+//         bKash.execute().onError();
+
+// },
+// onClose : function () {
+//     //define what happens if the user closes the pop up window
+
+//     //your code goes here
+// }
+// });
+</script>
+
+
+{% endblock body_script %}

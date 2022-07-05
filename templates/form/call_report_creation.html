@@ -1,0 +1,56 @@
+
+<form>
+  <div class="form-group row">
+    <label for="shaft_details" class="col-4 col-form-label">Shaft Details</label> 
+    <div class="col-8">
+      <input id="shaft_details" name="shaft_details" type="text" class="form-control">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="floor" class="col-4 col-form-label">Floor</label> 
+    <div class="col-8">
+      <input id="floor" name="floor" type="text" class="form-control">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="floor" class="col-4 col-form-label">Depth</label> 
+    <div class="col-8">
+      <input id="depth" name="floor" type="text" class="form-control">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="remark" class="col-4 col-form-label">Remark</label> 
+    <div class="col-8">
+      <input id="remark" name="remark" type="text" class="form-control">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="priority" class="col-4 col-form-label">Priority</label> 
+    <div class="col-8">
+      <select id="priority" name="priority" class="custom-select">
+        <option value="lead">Lead</option>
+        <option value="prospect">Prospect</option>
+        <option value="high_priority">High priority</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="client_name" class="col-4 col-form-label">Client Name</label> 
+    <div class="col-8">
+      <select id="client_name" name="client_name" class="custom-select">
+        <option value="{{username}}">{{name}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="project_address" class="col-4 col-form-label">Project Address</label> 
+    <div class="col-8">
+      <input id="project_address" name="project_address" type="text" class="form-control">
+    </div>
+  </div> 
+  <div class="form-group row">
+    <div class="offset-4 col-8">
+      <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</form>

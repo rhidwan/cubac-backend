@@ -1,0 +1,109 @@
+{% load static %}
+{% load divide %}
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bolder text-primary ">Passionate
+      {% if not request.user.user_type == "0" %}
+      <div class="float-right">
+        <a href="{% url 'create_target' %}" data-toggle="modal" data-title="Create New Target"
+          data-target="#CallBackForm" class="btn btn-sm btn-primary">New
+          Target</a>
+      </div>
+      {% endif %}
+    </h6>
+  </div>
+
+  <div class="card-body">
+    <div class="row mb-1">
+      <div class="col-4 offset-8">
+        <input type="search" id="payment-search" value="" class="text-muted form-control" placeholder="Search">
+      </div>
+    </div>
+    <div class="accordion" id="paymentaccordion">
+      <div class="card ">
+        <div class="card-header bg-secondary  text-white ">
+          <div class="row text-center">
+            <div class="col-3">Target Status</div>
+            <div class="col-2">Target</div>
+            <div class="col-2">Collection</div>
+            <div class="col-2">Balance</div>
+            <div class="col-1">%</div>
+            <div class="col-2">Remarks</div>
+          </div>
+         </div>
+      </div>
+
+        {% if targets %}
+        {% for target in targets %}
+        <div class="card">
+          <div class="card-header bg-default" id="payment{{forloop.counter}}e">
+            <div class="row text-center" data-toggle="collapse" data-target="#collapsepayment{{forloop.counter}}"
+              aria-expanded="true" aria-controls="collapsepayment{{forloop.counter}}">
+                <div class="col-3">{{target.target_status}}</div>
+                <div class="col-2">{{target.target_amount}}</div>
+                <div class="col-2">{{target.collected}}</div>
+                <div class="col-2">{{target.balance}}</div>
+                <div class="col-1">{% divide target.collected target.target_amount %}</div>
+                <div class="col-2">{{target.remarks}}</div>
+              </div>
+          </div>
+          <div id="collapsepayment{{forloop.counter}}" class="collapse" aria-labelledby="payment{{forloop.counter}}"
+            data-parent="#paymentaccordion">
+            <div class="card-body">
+                <!-- <th>Action</th> -->
+                {% if target.collection_set.all|length %}
+                <table class="table text-center" style="align-items: center;">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Project</th>
+                      <th>Amount</th>
+                      <th>note</th>
+                    </tr>
+                  </thead>
+                <!-- Subtask Loop Start -->
+                <tbody>
+                  {% for collection in target.collection_set.all %}
+                  <tr>
+                    <td>{{collection.date}}</td>
+                    <td>{{collection.project}}</td>
+                    <td>{{collection.amount}}</td>
+                    <td>{{collection.note}}</td>
+                  </tr>
+
+                </tbody>
+                {% endfor %}
+              </table>
+              {% else %}
+              <div class="d-flex justify-content-center">
+                <p>No Collection Yet</p>
+              </div>
+              {% endif %}
+              
+
+              <div class="row d-flex justify-content-center">
+                <a href="{% url 'update_target' target.id %}" data-toggle="modal" data-title="Update Target"
+                  data-target="#CallBackForm" class=" mx-1 btn btn-sm btn-primary">Update Target
+                </a>
+                <a href="{% url 'create_collection' target.id %}" data-toggle="modal" data-title="Create Collection"
+                  data-target="#CallBackForm" class=" mx-1 btn btn-sm btn-primary">New Collection
+                </a>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+
+
+
+      {% endif %}
+
+
+    </div>
+
+
+  </div>
+</div>

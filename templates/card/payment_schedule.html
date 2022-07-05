@@ -1,0 +1,108 @@
+{% load static %}
+{% load divide %}
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bolder text-primary ">Payment Schedule
+       
+      {% if not request.user.user_type == "0" %}
+      <div class="float-right">
+            <a href="{% url 'create_project_payment' id %}" data-toggle="modal" data-title="Create New Payment Target"
+            data-target="#CallBackForm" class="btn btn-sm btn-primary">New
+            Schedule</a>
+      </div>
+      {% endif %}
+      
+    </h6>
+  </div>
+  <div class="card-body">
+  {% if payments %}
+    <div class="accordion" id="paymentscaccordion">
+      <div class="card ">
+        <div class="card-header bg-secondary  text-white ">
+          <div class="row text-center">
+            <div class="col-3">Date</div>
+            <div class="col-2">Amount</div>
+            <div class="col-2">Received</div>
+            <div class="col-2">Balance</div>
+            <div class="col-3">Remarks</div>
+          </div>
+         </div>
+      </div>
+
+       
+        {% for payment in payments %}
+        <div class="card">
+          <div class="card-header bg-default" id="paymentsc{{forloop.counter}}e">
+            <div class="row text-center" data-toggle="collapse" data-target="#collapsepaymentsc{{forloop.counter}}"
+              aria-expanded="true" aria-controls="collapsepaymentsc{{forloop.counter}}">
+                <div class="col-3">{{payment.date}}</div>
+                <div class="col-2">{{payment.amount}}</div>
+                <div class="col-2">{{payment.collected}}</div>
+                <div class="col-2">{{payment.balance}}</div>
+                <div class="col-3">{{payment.remarks}}</div>
+              </div>
+          </div>
+          <div id="collapsepaymentsc{{forloop.counter}}" class="collapse" aria-labelledby="paymentsc{{forloop.counter}}"
+            data-parent="#paymentscaccordion">
+            <div class="card-body">
+                <!-- <th>Action</th> -->
+                {% if payment.collectionschedule_set.all|length %}
+                <table class="table text-center" style="align-items: center;">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>note</th>
+                    </tr>
+                  </thead>
+                <!-- Subtask Loop Start -->
+                <tbody>
+                  {% for collection in payment.collectionschedule_set.all %}
+                  <tr>
+                    <td>{{collection.date}}</td>
+                    <td>{{collection.amount}}</td>
+                    <td>{{collection.note}}</td>
+                  </tr>
+
+                </tbody>
+                {% endfor %}
+              </table>
+              {% else %}
+              <div class="d-flex justify-content-center">
+                <p>No Collection Yet</p>
+              </div>
+              {% endif %}
+              {% if not request.user.user_type == "0" %}
+
+              <div class="row d-flex justify-content-center">
+                <a href="{% url 'update_project_payment' payment.id %}" data-toggle="modal" data-title="Update Payment Info"
+                  data-target="#CallBackForm" class=" mx-1 btn btn-sm btn-primary">Update payment
+                </a>
+                <a href="{% url 'create_collection_schedule' payment.id %}" data-toggle="modal" data-title="Create Collection Schedule"
+                  data-target="#CallBackForm" class=" mx-1 btn btn-sm btn-primary">New Schedule
+                </a>
+              </div>
+              {% endif %}
+
+
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+
+
+      
+
+
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="mx-auto"> No payment Schedule </div>
+    </div>
+   
+    {% endif %}
+
+  </div>
+
+</div>

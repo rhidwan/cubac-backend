@@ -1,0 +1,207 @@
+
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Title</title>
+        
+        <style type="text/css">
+        {% if report_type == "0" %}
+            @page {
+                size: a4 landscape; /*595 x 842*/
+
+                @frame header_frame {           /* Static Frame */
+                    -pdf-frame-content: header_content;
+                    left: 20pt; width: 790pt; top: 10pt; height: 40pt;
+                }
+                @frame content_frame {          /* Content Frame */
+                    left: 20pt; width: 790pt; top: 50pt; height: 500pt;
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+                    left: 20pt; width: 790pt; top: 550pt; height: 20pt;
+                }
+            } 
+            {% else %}
+            @page {
+                size: a4 portrait;
+                @frame header_frame {           /* Static Frame */
+                    -pdf-frame-content: header_content;
+                    left: 50pt; width: 512pt; top: 20pt; height: 40pt;
+                }
+                @frame content_frame {          /* Content Frame */
+                    left: 50pt; width: 512pt; top: 60pt; height: 750pt;
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+                    left: 50pt; width: 512pt; top: 810pt; height: 20pt;
+                }
+            } 
+            {% endif %}
+            
+            body {
+                font-weight: 100;
+                font-size: 9px;
+            }
+            .font-big {
+                font-size: large;
+            }
+            div p{
+                display: inline-block;
+                margin-right: 15px !important;
+            }
+
+            table tr td {
+                white-space: nowrap;
+            }
+
+            th {
+                background-color: #bfbfbfd3;
+            }
+        </style>
+
+    </head>
+    
+    <body>
+        <div id="header_content">
+        <div>   
+            <img src="https://i.imgur.com/mzCv7nr.jpg" alt="Logo" width="150px" height="40px" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+        </div>   
+    </div>
+        
+        {% if report_type == "0" %}
+       
+            <div style="text-align: center;" class="font-big">
+                <h3>Sales Call Report</h3>
+                {% if client %}
+                <p><b>Client: </b>{{client.client_name}}</p>
+                {% else %}
+                <p><b>Client: </b> All</p>
+                {% endif %}
+
+                {% if sales_person %}
+                <p><b>Sales Person: </b> {{sales_person}}</p>
+                {% else %}
+                <p><b>Sales Person: </b> All</p>
+                {% endif %}
+                 
+                {% if priority  %}
+                <p><b>Priority: </b> {{ priority }}</p>
+                {% endif %}
+                <p><b>Sort By:</b> {{sort_by}}</p>
+                {% if from_date and to_date %}
+                <p><b>From: </b>{{from_date}} <b>to: </b> {{to_date}}</p>
+                {% elif from_date %}
+                <p><b>From: </b> {{from_date}} to Present</p>
+                {% elif to_date %}
+                <p><b>Till: </b> {{to_date}}</p>
+                {% else %}
+                <p><b>Timeline: </b>All</p>
+                {% endif %}
+                <p> <b>Generated at: </b>  {% now "jS F Y H:i" %} </p>
+
+            </div>
+
+        <table style="border: 0.5px solid black ; text-align: center; vertical-align: middle; padding-top: 2px ;">
+            <thead>
+                <tr>
+                    <th style="width: 3%;">SL</th>
+                    <th style="width: 10%;">Client Name</th>
+                    <th style="width: 12%;">Client Address</th>
+                    <th style="width: 9%;">Client Mobile</th>
+                    <th style="width: 12%;">Project name & Address</th>
+                    <th style="width: 5%;">Unit</th>
+                    <th style="width: 5%;">Floor</th>
+                    <th style="width: 7%;">Last Activity Date</th>
+                    <th style="width: 12%;">Action</th>
+                    <th style="width: 8%;">Offered Amount</th>
+                    <th style="width: 12%;">Next action</th>
+                    <th style="width: 7%;">Next Action Date</th>
+                    <th style="width: 12% ;">Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for callreport in callreports %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{callreport.client_name}}</td>
+                    <td>{{callreport.client_address}}</td>
+                    <td>{{callreport.client_mobile}}</td>
+                    <td>{{callreport.project}}</td>
+                    <td> {{callreport.unit}}
+                    </td>
+                    <td>{{callreport.floor}}</td>
+                    <td>{{callreport.followup_set.all.last.date}}</td>
+                    <td>{{callreport.followup_set.all.last.description}}</td>
+                    <td>{{callreport.followup_set.all.last.amount}}</td>
+                    <td>{{callreport.followup_set.all.last.next_action}}</td>
+                    <td>{{callreport.followup_set.all.last.next_action_date}}</td>
+                    <td>{{callreport.followup_set.all.last.note}}</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            {% for callreport in callreports %}
+            <div style="text-align: center;">
+                <h3>CallReport Report (Client Details)</h3>
+            </div>
+            <div style="margin-top:5px;">
+                <div>
+                   <b>Client Name:</b> {{callreport.client_name}}
+                </div>
+                <div>
+                    <b>Client Address: </b>{{callreport.client_address}}
+                </div>
+                <div>
+                    <b>Client Mobile No: </b>{{callreport.client_mobile}}
+                </div>
+                <div>
+                    <b>Project Name & address: </b> {{callreport.project}}
+                </div>
+                <div>
+                    <b>Unit: </b> {{callreport.unit}}
+                </div>
+                <div>
+                    <b>Floor: </b> {{callreport.floor}}
+                </div>
+                <div>
+                    <b>Shaft Details: </b> {{callreport.shaft_details}}
+                </div>
+                <div>
+                    <b>Remarks: </b> {{callreport.remarks}}
+                </div>
+            </div>
+
+            <table style="border: 0.5px solid black ; text-align: center; vertical-align: middle; padding: 2px ;"">
+                <thead>
+                    <tr>
+                        <th>Activity Date</th>
+                        <th>Offered Amount</th>
+                        <th>Activity</th>
+                        <th>Next Action</th>
+                        <th>Next Action Date</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for followup in callreport.followup_set.all %}
+                        <tr>
+                            <td>{{followup.date}}</td>
+                            <td>{{followup.amount}}</td>
+                            <td>{{followup.description}}</td>
+                            <td>{{followup.next_action}}</td>
+                            <td>{{followup.next_action_date}}</td>
+                            <td>{{followup.note}}</td>
+                        </tr>
+                    {% endfor %}
+ 
+                </tbody>
+            </table>
+            {% endfor %}
+
+        {% endif %}
+        <div id="footer_content" style="text-align:right">Page  <pdf:pagenumber>  of  <pdf:pagecount>  </div>
+    </body>
+</html>

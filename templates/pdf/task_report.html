@@ -1,0 +1,134 @@
+
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Title</title>
+        <style type="text/css">
+            @page {
+                size: a4 portrait;
+                @frame header_frame {           /* Static Frame */
+                    -pdf-frame-content: header_content;
+                    left: 50pt; width: 512pt; top: 20pt; height: 40pt;
+                }
+                @frame content_frame {          /* Content Frame */
+                    left: 50pt; width: 512pt; top: 60pt; height: 750pt;
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+                    left: 50pt; width: 512pt; top: 810pt; height: 20pt;
+                }
+            } 
+            body {
+                font-weight: 100;
+                font-size: 9px;
+            }
+            .font-big {
+                font-size: large;
+            }
+            div p{
+                display: inline-block;
+                margin-right: 15px !important;
+            }
+
+            table tr td {
+                white-space: nowrap;
+            }
+
+            th {
+                background-color: #bfbfbfd3;
+            }
+        </style>
+    </head>
+    <div id="header_content">
+        <div>   
+            <img src="https://i.imgur.com/mzCv7nr.jpg" alt="Logo" width="150px" height="40px" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+        </div>   
+    </div>
+
+    <body>
+        <div style="text-align: center;" class="font-big">
+            {% if need_detail == '1' %}
+            <h3>Task Report (details)</h3>
+            {% else %}
+            <h3>Task Report (latest Response) </h3>
+            {% endif %}
+            {% if person %}
+            <p><b>Person: </b>{{person.name}}</p>
+            {% else %}
+            <p><b>Person: </b> All</p>
+            {% endif %}
+
+            {% if status != "----"  %}
+            <p><b>Status: </b> {{status}}</p>
+            {% else %}
+            <p><b>Status: </b> All</p>
+            {% endif %}
+
+            {% if from_date and to_date %}
+            <p><b>From: </b>{{from_date}} <b>to: </b> {{to_date}}</p>
+            {% elif from_date %}
+            <p><b>From: </b> {{from_date}} to Present</p>
+            {% elif to_date %}
+            <p><b>Till: </b> {{to_date}}</p>
+            {% else %}
+            <p><b>Timeline: </b>All</p>
+            {% endif %}
+            <p> <b>Generated at: </b>  {% now "jS F Y H:i" %} </p>
+
+        </div>
+       
+        <table style="border: 0.5px solid black ; text-align: center; vertical-align: middle; padding-top: 2px ;">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">SL</th>
+                    <th style="width: 15%;">Task</th>
+                    <th style="width: 10%;">Assigned Date</th>
+                    <th style="width: 10%;">Deadline</th>
+                    <th style="width: 10%;">Responsible Person</th>
+                    <th style="width: 20%;">Response</th>
+                    <th style="width: 10%;">Last Response Date</th>
+                    <th style="width: 10%;">Status</th>
+                    <th style="width: 10%;">Completion Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{task.name}}</td>
+                    <td>{{task.assigned_date}}</td>
+                    <td>{{task.deadline}}</td>
+                    <td>{{task.responsible_person.name}}</td>
+                    <td>{{task.subtask_set.all.0.description}}</td>
+                    <td>{{task.subtask_set.all.0.date}}</td>
+                    <td>{{task.status}}</td>
+                    <td>{{task.completion_date|default:''}}</td>
+                </tr>
+                {% if need_detail == '1' %}
+                    {% for subtask in task.subtask_set.all %}
+                        {% if forloop.counter != 1 %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{subtask.description}}</td>
+                            <td>{{subtask.date}}</td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+    <div id="footer_content" style="text-align:right">Page  <pdf:pagenumber>  of  <pdf:pagecount>  </div>
+
+</html>
