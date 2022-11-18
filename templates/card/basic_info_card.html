@@ -1,0 +1,99 @@
+{% load static %}
+
+<div class="row">
+    <div class=" d-flex justify-content-center align-items-center mb-2">
+        <div>
+            <img src="{% if basic_info.photo %}{% if basic_info.photo.url %}{{basic_info.photo.url}}{%else%}{{basic_info.photo}}{% endif %}{% else %}
+                            {% if user.gender == 0 %}
+                            {% static 'img/male_avatar.svg' %}
+                            {% else %}
+                            {% static 'img/female_avatar.svg' %}
+                            {% endif %}
+                        {% endif %}" alt="user-avatar" class="rounded" height="150" width="150" id="uploadedAvatar" />
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mb-2">
+        <div>
+            <span class=" text fw-bold text-capitalize fs-5">{{user.full_name}}</span>
+
+            <div>
+                <i class="menu-icon tf-icons bx bx-phone"></i>
+                <span class="text fw-semibold">{{basic_info.phone_number}}</span>
+            </div>
+            <div>
+                <i class="menu-icon tf-icons bx bx-envelope"></i>
+                <span class="text fw-semibold">{{user.email}}</span>
+            </div>
+            <div>
+                <i class="menu-icon tf-icons bx bx-current-location"></i>
+                <span class="text fw-semibold">{{basic_info.present_address}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="my-2">
+        <h5 class="fw-bolder">Basic Information</h5>
+        <div class="">
+
+            <table class="table info-table table-borderless">
+                <tbody>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold">Father's Name : </small></td>
+                    <td class="">
+                      <p class="mb-0">{{basic_info.father_name}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold">Mother's Name : </small></td>
+                    <td class="">
+                      <p class="mb-0"> {{basic_info.mother_name}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold">Date of Birth : </small></td>
+                    <td class="">
+                      <p class="mb-0"> {{user.date_of_birth}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold">Permanent Address : </small></td>
+                    <td class="">
+                      <p class="mb-0">{{basic_info.permanent_address}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold"> Nid/Passport No : </small></td>
+                    <td class="">
+                      <p class="mb-0">{{basic_info.nid_passport_no}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold">Nationality : </small></td>
+                    <td class="">
+                      <p class="mb-0">{{basic_info.nationality}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold">Currently Employed : </small></td>
+                    <td class="">
+                      <p class="mb-0"> {% if basic_info.is_employed == True %}Yes{% else %}No{% endif %}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-end"><small class="text-light fw-semibold">Work Phone : </small></td>
+                    <td class="">
+                      <p class="mb-0">{{basic_info.work_phone|default:''}}</p>
+                    </td>
+                  </tr>
+
+
+                 
+                  </tbody>
+                </table> 
+        </div>
+    </div>
+</div>

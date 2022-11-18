@@ -1,56 +1,81 @@
 {% extends "base.html" %}
 {% load static %}
+{% load encode_static %}
 
 {% block title %}
-Dashboard |
+Dashboard | CUBAC
 {% endblock title %}
 
-{% block content %}
-
-<!-- Begin Page Content -->
-<div class="container-fluid">
- 
-  <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-    <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-  </div>
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active" href="#">Service</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Sales Call Report</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link" href="3">Tasks</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="#">Project</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Collection</a>
-    </li>
-  </ul>
-
-
-  <!-- Content Row -->
-  <!-- Page Heading -->
-  <!-- <h1 class="h3 mb-2 my-3 text-gray-800">Recent Updates</h1> -->
-  <!-- <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
-
-
-</div>
-<!-- /.container-fluid -->
-
-{% endblock content %}
 {% block modal %}
 
 {% endblock modal %}
 
+{% block content %}
+<div class="row">
+            
+      
+<div class="row">
+  {% if request.user.is_staff %}
+  
+  <div class="col-sm-4 col-xs-6 mb-4">
+      {% url 'applications' as action_url %}
 
+      {% with '?season='|addstr:open_applications.0.id as suffix %}
+      {% include 'card/micro_card.html' with title="Number of Applicants" info=open_applications.0.application_set.all.count btn_text="View All" action_url=action_url|addstr:suffix %}
+      {% endwith %}
+    </div>
+
+    <div class="col-sm-4 col-xs-6 mb-4">
+      {% url 'applications' as action_url %}
+
+      {% concat_all action_url '?season=' open_applications.0.id '&status=pending' as suffix %}
+      {% include 'card/micro_card.html' with title="Pending Approval" info=pending_approval btn_text="View All" action_url=suffix  %}
+     
+    </div>
+
+    <div class="col-sm-4 col-xs-6 mb-4">
+      {% url 'list_transaction' as action_url %}
+
+      {% concat_all action_url '?season=' open_applications.0.id as suffix %}
+      {% include 'card/micro_card.html' with title="Paid" info=payment_done btn_text="View All" action_url=suffix %}
+    </div>
+  {% else%}
+
+      {% if applications %}
+  <div class="col-sm-4 col-xs-6 mb-4">
+      {% url 'application_detail' applications.0.id as action_url %}
+      {% if applications.0.is_appproved %}
+          {% include 'card/micro_card.html' with title="Application Status" info="Approved" btn_text="View" action_url=action_url %}
+      {% else %}
+          {% include 'card/micro_card.html' with title="Application Status" info="Not Approved" btn_text="View" action_url=action_url %}
+      {% endif %}
+  </div>
+
+  <div class="col-sm-4 col-xs-6 mb-4">
+      {% url 'application_transaction' applications.0.id  as action_url %}
+      {% if transactions %}
+          {% url 'transaction_detail' transactions.0.id as trx_action_url %}
+          {% if  transactions.0.is_appproved %}
+          
+              {% include 'card/micro_card.html' with title="Payment Status" info="Approved" btn_text="View" action_url=trx_action_url %}    
+          {% else %}
+              {% include 'card/micro_card.html' with title="Payment Status" info="Not Approved Yet" btn_text="View" action_url=trx_action_url %}    
+          {% endif %}
+      {% else %}
+          {% include 'card/micro_card.html' with title="Payment Status" info="Not Paid" btn_text="Add Payment" modal="modaltx" action_url=action_url %}
+          {% include 'modal/form_modals.html' with modal_id="modaltx" title="New Transaction Entry" form="transaction" action=action_url  %}
+      {% endif %}
+    </div>
+      {% endif %}
+  {% endif %}
+
+</div>
+
+
+      </div>
+    </div>
+  </div>
+{% endblock content %}
 
 {% block body_script %}
 <script>

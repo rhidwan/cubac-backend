@@ -1,0 +1,58 @@
+{% load static %}
+<div class="card  border border-light mb-2">
+  <div class="card-header bg-default">
+    <div class="row">
+      <div class="{% if disable_action != True %} col-11 {% else %} col-12{% endif %}">
+        <div class="d-flex align-items-center">
+          <div class="flex-shrink-0 me-3">
+
+            <img src="{% static 'img/work.svg' %}" alt="grad-hat-avatar" class="rounded" height="30" width="30"
+              id="gradHatAvatar" />
+
+          </div>
+
+          <div class="flex-grow-1">
+            <span class="fw-semibold d-block">{{work_experience.organization}}</span>
+            <span class="font-weight-bold"></span> {{work_experience.post}} <br>
+            <span class="font-weight-bold">{{work_experience.from_date}} - {% if work_experience.is_current %}
+              {{work_experience.to_date}} {% else %} Present {% endif %}</span>
+          </div>
+        </div>
+      </div>
+
+      {% if disable_action != True %}
+      <div class="col-1 d-flex justify-content-end align-items-center gap-1">
+
+        <div class="dropdown">
+          <button class="btn p-0" type="button" id="workexperience{{forloop.counter}}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="bx bx-dots-vertical-rounded"></i>
+          </button>
+
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="workexperience{{forloop.counter}}">
+           
+       
+            <a data-url="{% url 'edit_work_experience_detail' work_experience.id %}" data-bs-toggle="modal"
+            data-title="Edit Educational Background" data-bs-target="#UpdateFormModal" class="dropdown-item">
+            Edit
+          </a>
+    
+          <a href="{% url 'edit_work_experience_detail' work_experience.id %}" class="ajax-delete dropdown-item">
+            Delete
+            <!-- <span class="d-none d-sm-block">Delete</span> -->
+          </a>
+            
+          </div>
+        </div>
+        
+        <!-- <span class="d-none d-sm-block">Edit</span> -->
+
+
+        
+      </div>
+      {% endif %}
+
+
+    </div>
+  </div>
+
+</div>

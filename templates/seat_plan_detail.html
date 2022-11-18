@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% load param_replace %}
+{% load encode_static %}
+
+{% block title %}
+Seat Plan For {{season.title}} CUBAC
+{% endblock title %}
+
+{% block breadcrumb %}
+<div class="d-flex justify-content-between align-items-center">   
+  <h4 class="fw-bold py-2">
+    <span class="text-muted fw-light"></span>Seat Plan
+   </h4>
+   <div class="d-flex justify-content-center align-items-center">
+    {% if request.user.is_staff %}
+    {% concat_all "modalseatplan" season.id as modalid %}
+    <div>
+        <button 
+        type="button" 
+        class="btn btn-outline-primary"  
+        data-bs-toggle="modal"
+        data-bs-target="#{{modalid}}">
+        <i class="bx bx-list-plus d-block d-sm-none"></i>
+        <span class="d-none d-sm-block">Add Room</span>
+      </button>
+    </div>
+   
+  {% endif %}
+</div>
+
+</div>
+{% url 'seat_plan_detail' season.id as seat_plan_generate %}
+{% include 'modal/form_modals.html' with modal_id=modalid title="New Seat Plan" form="seat_plan_form" action=seat_plan_generate  %}
+
+{% endblock breadcrumb %}
+
+{% block content %}
+    <div class="row">
+      <div class="col-lg-12 mb-4 order-0">
+        
+        <div class="card">
+
+              <div class="card-body searchable-list">
+                <div class="row mb-2">
+                  <div class="col-2">
+                    <input type="search" id="table-search" value="" class="search-div form-control" placeholder="Search">
+                  </div>
+                    <div class="col-10 d-flex justify-content-space-between">
+                     
+                      
+
+                      <div class="dropdown me-2">
+                        {% regroup applications by seat as vanues %}
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Venue: {% if filter.venue %}{% for group in vanues %} {% if group.grouper.id|stringformat:"s" == filter.venue %}{{group.grouper.title}} {%endif%}  {% endfor %}{% endif %}
+                        </button>
+                        <ul class="dropdown-menu  dropdown-menu-end">
+                          <li><a class="dropdown-item {% if not filter.venue %}active{% endif %} " href="?{% param_replace venue=''  %}">All</a></li>
+                          
+                          {% for group in vanues %}
+                              <li><a class="dropdown-item {% if group.grouper.id|stringformat:'s' == filter.venue %}active{% endif %}" href="?{% param_replace venue=group.grouper.id  %}">{{ group.grouper.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                    </div>
+             
+                    </div>
+                 
+                  </div>
+                  {% if applications %}
+                  <div class="row"> 
+
+                    {% include 'tables/seat_plan_table.html' with applications=applications split_search=True %}
+                  </div>
+                  {% include 'partials/pagination.html' with pagination=applications %}
+
+                  {% else %}
+                  <div class="row mt-3">
+                    {% include 'card/nodata_small.html' %}
+                    {% endif %}
+                  </div>
+                  
+          </div>
+        </div>
+        
+      </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block modal %}
+
+{% endblock modal %}
+
+

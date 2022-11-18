@@ -1,3 +1,4 @@
+from tokenize import blank_re
 from django.db import models
 from django_resized import ResizedImageField
 import uuid
@@ -8,27 +9,27 @@ from user.models import User
 class EducationalBackground(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="educational_background", related_query_name="educational_background")
-    degree = models.CharField(max_length=20, blank=False, null=False)
+    degree = models.CharField(max_length=50, blank=False, null=False)
     institute = models.CharField(max_length=50, blank=False, null=False)
     passing_year = models.CharField(max_length=4, blank=True, null=True)
     area_major = models.CharField(max_length=50, blank=False, null=False)
-    division_class_cgpa = models.CharField(max_length=10, blank=False, null=False)
+    division_class_cgpa = models.CharField(max_length=10, blank=True, null=True)
 
 class WorkExperience(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.CharField(max_length=20, null=False, blank=False)
     organization = models.CharField(max_length=50, null=False, blank=False)
-    major_responsibilities = models.TextField()
-    from_date = models.DateField()
+    major_responsibilities = models.TextField(null=True, blank=True )
+    from_date = models.DateField(null=False, blank=False)
     to_date = models.DateField(null=True, blank=True)
     is_current = models.BooleanField()
 
 class AchievementMembership(models.Model):
     TYPE_CHOICE = (
-        ('Membership', 'membership'),
-        ('Achievement', 'achievement'),
-        ('Award', 'award')
+        ('Membership', 'Membership'),
+        ('Achievement', 'Achievement'),
+        ('Award', 'Award')
         )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,10 +48,11 @@ class TestScore(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     test = models.CharField(max_length=10, choices=EXAM_CHOICE,  null=False, blank=False)
     score = models.CharField(max_length=20, null=False, blank=False)
-
+    test_date = models.DateField(null=False, blank=False)
+    
 class BasicInfo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="basic_info")
     father_name = models.CharField(max_length=250, null=False, blank=False)
     mother_name = models.CharField(max_length=250, null=False, blank=False)
     nationality = models.CharField(max_length=30, null=False, blank=False)

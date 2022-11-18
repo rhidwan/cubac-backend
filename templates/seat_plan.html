@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Seat Plan | CUBAC
+{% endblock title %}
+
+{% block breadcrumb %}
+<div class="d-flex justify-content-between align-items-center">   
+  <h4 class="fw-bold py-2">
+    <span class="text-muted fw-light"></span>Seat Plan
+   </h4>
+   <div class="d-flex justify-content-center align-items-center">
+    
+  </div>
+</div>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+
+
+
+{% if seasons or applications %}
+
+<div class="card">
+    <div class="card-body searchable-list">
+      <div class="row mb-2">
+        <div class="col-2">
+          <input type="search" id="table-search" value="" class="search-div form-control" placeholder="Search">
+        </div>
+        </div>
+    
+    <div class="row">
+        {% if seasons %}
+            {% for season in seasons %}
+            <div class="col-md-6 col-xs-12">
+                {% include 'card/seat_plan_season_card.html' with season=season %}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if applications %}
+
+        {% for application in applications %}
+        <div class="col-md-6 col-xs-12">
+            {% include 'card/seat_plan_application_card.html' with season=season %}
+        </div>
+        {% endfor %}
+
+        {% endif %}
+
+       
+            
+    </div>
+    </div>
+    </div>
+    {% else %}
+    {% include 'card/nodata.html' %}
+    {% endif %}
+       
+  
+    
+{% endblock content %}
+
+

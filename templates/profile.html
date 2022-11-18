@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Profile | CUBAC
+{% endblock title %}
+
+{% block breadcrumb %}
+<div class="d-flex justify-content-between align-items-center">   
+    <h4 class="fw-bold py-2">
+      <span class="text-muted fw-light"></span> Profile
+     </h4>
+    
+</div>
+{% endblock breadcrumb %}
+
+{% block content %}
+<!-- {{ profile }} -->
+<div class="row">
+
+    <div class="col-12">
+        <div class="card mb-3">
+            <h5 class="card-header">Basic Information</h5>
+            <div class="card-body">
+                {% if profile.basic_info %}
+                
+                    {% include 'form/basic_info_form.html' with basic_info=profile.basic_info.0 %}
+                {% else %}
+                    {% include 'form/basic_info_form.html'  %}
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+<div class="row" data-masonry='{"percentPosition": true }'>
+        <div class="col-md-6 col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">   
+                    <h5>Educational Background</h5>
+                    <div class="d-flex justify-content-center align-items-center">
+                      
+                        <button 
+                        type="button" 
+                        class="btn btn-outline-primary"  
+                         data-bs-toggle="modal"
+                        data-bs-target="#modaleb">
+                        <i class="bx bx-list-plus d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Add New</span>
+                        </button>
+
+                    </div>
+                </div>
+              
+                <div class="card-body">
+            
+                    {% if profile.educational_backgrounds %}
+                    {% for education in profile.educational_backgrounds %}
+                        {% include 'card/educational_background_card.html' with education=education %}
+                    {% endfor %}
+                    {% else %}
+                        {% include 'card/nodata_small.html' %}
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+    
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">   
+                    <h5>Test Score</h5>
+                    <div class="d-flex justify-content-center align-items-center">
+                      
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalts">
+                        <i class="bx bx-list-plus d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Add New</span>
+                    </button>
+                       
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if profile.test_scores %}
+                    {% for test_score in profile.test_scores %}
+                        {% include 'card/test_score_card.html' with test_score=test_score %}
+                    {% endfor %}
+                    {% else %}
+                        {% include 'card/nodata_small.html' %}
+                    {% endif %}
+                    
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-6 col-sm-12">
+    
+            <div class="card mb-3">
+       
+                <div class="card-header d-flex justify-content-between align-items-center">   
+                    <h5>Achievement/ Membership</h5>
+                    <div class="d-flex justify-content-center align-items-center">
+                      
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalam">
+                        <i class="bx bx-list-plus d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Add New</span>
+                    
+                    </button>
+                       
+                    </div>
+                </div>
+            
+                <div class="card-body">
+                    {% if profile.achievements %}
+                    {% for achievement in profile.achievements %}
+                        {% include 'card/achievement_membership_card.html' with achievement_membership=achievement %}
+                    {% endfor %}
+                    {% else %}
+                        {% include 'card/nodata_small.html' %}
+                    {% endif %}
+                   
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">   
+                <h5 class="mb-0">Work Experience</h5>
+               
+                  
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                    data-bs-target="#modalwx">
+                    
+                    <i class="bx bx-list-plus d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Add New</span>
+                </button>
+                   
+              
+            </div>
+            <div class="card-body">
+                {% if profile.work_experiences %}
+                {% for work_experience in profile.work_experiences %}
+                    {% include 'card/work_experience_card.html' with work_experience=work_experience %}
+                {% endfor %}
+                {% else %}
+                    {% include 'card/nodata_small.html' %}
+                {% endif %}
+            </div>
+        </div>
+        
+        </div>
+
+   
+</div>
+
+<script src="{% static 'vendor/masonry/masonry.pkgd.min.js' %}"></script>
+
+{% include 'modal/form_modals.html' with modal_id="modaleb" title="New Educational Background" form="education_background" action_name="education_background"  %}
+{% include 'modal/form_modals.html' with modal_id="modalts" title="New Test Score" form="test_score" action_name="test_score"  %}
+{% include 'modal/form_modals.html' with modal_id="modalwx" title="New Work Experience" form="work_experience" action_name="work_experience"  %}
+{% include 'modal/form_modals.html' with modal_id="modalam" title="New Achievement/Membership" form="achievement_membership" action_name="achievement_membership"  %}
+{% include 'modal/edit_form_modals.html' %}
+{% endblock content %}

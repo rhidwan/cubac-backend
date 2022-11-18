@@ -1,0 +1,46 @@
+{% load static %}
+<form action="{%if action %} {{action}} {% else %} {% url action_name %}{% endif %}" method="post" class="form">
+    {% csrf_token %}
+    <div class="row">
+
+        <div class="mb-3 col-md-6">
+            <label for="transaction_method" class="form-label">Transaction Method</label>
+                <select class="form-select" id="transaction_method" name="transaction_method" aria-label="Select Method" required>
+                  <option value="Bkash"  selected  >Bkash</option>
+        
+                </select>
+              </div>
+
+        <div class="mb-3 col-md-6">
+            <label for="trxid" class="form-label">Transaction id</label>
+            <input class="form-control" type="text" name="transaction_id" id="trxid"
+                value="{{transaction.transaction_id|default:''}}" required/>
+        </div>
+        <div class="mb-3 col-md-6">
+            <label for="trxAmount" class="form-label">Transaction Amount</label>
+            <input class="form-control" type="number" name="amount" id="trxAmount"
+                value="{{transaction.amount|default:''}}" required/>
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label for="transaction_from" class="form-label">Transaction Phone Number</label>
+            <input class="form-control" type="text" id="transaction_from" name="transaction_from"
+                value="{{transaction.transaction_from|default:''}}" required/>
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label for="transaction_time" class="form-label">Transaction Date & Time</label>
+            <input type="date" class="form-control" id="transaction_time" name="transaction_time"
+                value="{{transaction.transaction_time|default:''}}" required />
+        </div>
+
+    </div>
+    <div class="row help-text text-center text-danger">
+
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary me-2 ajax-submit">Save changes</button>
+
+    </div>
+</form>
+

@@ -61,7 +61,7 @@ from .managers import UserManager
 
 
 class User(AbstractUser):
-    GENDER_CHOICES = [(0, 'Male'), (1, 'Female')]
+    GENDER_CHOICES = [(0, 'Male'), (1, 'Female'), (2, 'Other')]
 
     username = None
     email = models.EmailField(_('email address'), unique=True)

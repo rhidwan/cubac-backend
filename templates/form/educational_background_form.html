@@ -1,0 +1,61 @@
+
+<form action="{%if action %} {{action}} {% else %} {% url action_name %}{% endif %}" method="post" class="form">
+    {% csrf_token %}
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="degree" class="form-label">Degree</label>
+            <input
+              class="form-control"
+              type="text"
+              id="degree"
+              name="degree"
+              value="{{education_background.degree}}"
+              required
+            />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="institute" class="form-label">Institute</label>
+            <input class="form-control" type="text" name="institute" id="institute" value="{{education_background.institute}}" required />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="passing_year" class="form-label">Passing Year</label>
+            <input
+              class="form-control"
+              type="text"
+              id="passing_year"
+              name="passing_year"
+              value="{{education_background.passing_year}}"
+            />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="area_major" class="form-label">Major/Group</label>
+            <input
+              type="text"
+              class="form-control"
+              id="area_major"
+              name="area_major"
+              value="{{education_background.area_major}}"
+              required
+            />
+          </div>
+
+        
+          <div class="mb-3 col-md-6">
+            <label for="division_class_cgpa" class="form-label">Division / Class / CGPA</label>
+            <input type="text" class="form-control" id="division_class_cgpa" name="division_class_cgpa" value="{{education_background.division_class_cgpa}}" />
+          </div>
+          
+        </div>
+        <div class="row help-text text-center text-danger">
+
+        </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary me-2 ajax-submit">Save changes</button>
+
+        </div>
+  
+</form>
+  

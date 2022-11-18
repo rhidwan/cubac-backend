@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% load param_replace %}
+
+{% block title %}
+Transaction | CUBAC
+{% endblock title %}
+
+{% block breadcrumb %}
+<div class="d-flex justify-content-between align-items-center">   
+  <h4 class="fw-bold py-2">
+    <span class="text-muted fw-light"></span>Transactions
+   </h4>
+   <div class="d-flex justify-content-center align-items-center">
+    
+  </div>
+</div>
+{% endblock breadcrumb %}
+{% block content %}
+    <div class="row">
+      <div class="col-lg-12 mb-4 order-0">
+        
+        <div class="card">
+
+              <div class="card-body searchable-list">
+                <div class="row mb-2">
+                  <div class="col-2">
+                    <input type="search" id="table-search" value="" class="search-div form-control" placeholder="Search">
+                  </div>
+                    <div class="col-10 d-flex justify-content-space-between">
+                     
+                      <div class="dropdown me-2">
+
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Status : {{filters.status|default:''}}
+                        </button>
+
+                        <ul class="dropdown-menu  dropdown-menu-end">
+                          <li><a class="dropdown-item {% if not filters.status %}active{% endif %} " href="?{% param_replace status=''  %}">All</a></li>
+                          <li><a class="dropdown-item {% if filters.status == 'approved' %}active{% endif %} " href="?{% param_replace status='approved' %}">Approved</a></li>
+                          <li><a class="dropdown-item {% if filters.status == 'pending' %}active{% endif %} " href="?{% param_replace status='pending' %}">Pending</a></li>
+                        </ul>
+
+                      </div>
+
+                      <div class="dropdown me-2">
+                        {% regroup transactions by application.call_for_application as seasons %}
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Season: {% if filters.season %}{% for group in seasons %} {% if group.grouper.id|stringformat:"s" == filters.season %}{{group.grouper.title}} {%endif%}  {% endfor %}{% endif %}
+                        </button>
+                        <ul class="dropdown-menu  dropdown-menu-end">
+                          <li><a class="dropdown-item {% if not filters.season %}active{% endif %} " href="?{% param_replace season=''  %}">All</a></li>
+                          
+                          {% for group in seasons %}
+                              <li><a class="dropdown-item {% if group.grouper.id|stringformat:'s' == filters.season %}active{% endif %}" href="?{% param_replace season=group.grouper.id  %}">{{ group.grouper.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                        
+                      </div>
+                      <div class="dropdown me-2">
+                        <button class=" btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Date : {% if filters.date == 'today' %} Today {% elif filters.date == "last30" %}This Month {% elif filters.date == "last7" %}This Week{% endif %}
+                        </button>
+                        <ul class="dropdown-menu  dropdown-menu-end">
+                          <li><a class="dropdown-item {% if not filters.date %}active{% endif %} " href="?{% param_replace date=''  %}">All</a></li>
+                          <li><a class="dropdown-item {% if filters.date == 'today' %}active{% endif %} " href="?{% param_replace date='today' %}">Last day</a></li>
+                          <li><a class="dropdown-item {% if filters.date == 'last7' %}active{% endif %} " href="?{% param_replace date='last7' %}">Last week</a></li>
+                          <li><a class="dropdown-item {% if filters.date == 'last30' %}active{% endif %} " href="?{% param_replace date='last30' %}">Last month</a></li>
+                        </ul>
+                        
+                      </div>
+             
+                    </div>
+                 
+                  </div>
+                  {% if transactions %}
+                  <div class="row"> 
+
+                    {% include 'tables/payment_table.html' with transactions=transactions split_search=True %}
+                  </div>
+                  {% include 'partials/pagination.html' with pagination=transactions %}
+
+                  {% else %}
+                  <div class="row mt-3">
+                    {% include 'card/nodata_small.html' %}
+                    {% endif %}
+                  </div>
+                  
+          </div>
+        </div>
+        
+      </div>
+</div>
+
+
+{% endblock content %}
+
+{% block modal %}
+
+{% endblock modal %}
+
+

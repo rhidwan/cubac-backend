@@ -1,0 +1,45 @@
+
+        <!-- Modal -->
+        <div class="modal fade" id="{{modal_id}}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCenterTitle">{{title}}</h5>
+                    <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    {% if form == "work_experience" %}
+                        {% include 'form/work_experience_form.html' with action_name=action_name work_experience=work_experience %}
+                
+                    {% elif form == "education_background" %}
+                        {% include 'form/educational_background_form.html' with action_name=action_name education_background=education_background %}
+
+                    {% elif form == "test_score" %}
+                        {% include 'form/test_score_form.html' with action_name=action_name test_score=test_score %}
+                    
+                    {% elif form == "achievement_membership" %}
+                        {% include 'form/achievement_membership_form.html' with action_name=action_name achievement_membership=achievement_membership %}
+                    
+                    {% elif form == "transaction" %}
+                        {% include 'form/manual_payment_form.html' with action=action transaction=transaction %}
+                    
+                    {% elif form == "call_application_form" %}
+                        {% include 'form/call_application_form.html' with action=action call_application=call_application %}
+                    
+                    {% elif form == "seat_plan_form" %}
+                        {% include 'form/seat_plan_form.html' with action=action seat_plan=seat_plan %}
+                    
+                    {% elif form == "update_user_info" %}
+                        {% include 'form/user_update_form.html' %}
+
+                    {% endif %}
+                </div>
+          
+            </div>
+        </div>
+        </div>

@@ -12,7 +12,6 @@ class CallForApplication(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     start_date = models.DateField(blank=False, null=False)
     end_date = models.DateField(blank=False, null=False)
-    is_open = models.BooleanField(default=False)
-    shortcode = models.CharField(max_length=10, blank=False, null=False)
+    shortcode = models.CharField(max_length=20, blank=False, null=False)
 
     

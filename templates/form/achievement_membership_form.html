@@ -1,0 +1,43 @@
+
+<form action="{%if action %} {{action}} {% else %} {% url action_name %}{% endif %}" method="post" class="form">
+    {% csrf_token %}
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="achievement_type" class="form-label">Type</label>
+            
+                <select class="form-select" id="achievement_type" name="achievement_type" aria-label="Select Type" required>
+                  <option value="Membership" {% if achievement_membership.achievement_type == "Membership"%} selected {% endif %} >Membership</option>
+                  <option value="Achievement" {% if achievement_membership.achievement_type == "Achievement"%} selected {% endif %}>Achievement</option>
+                  <option value="Award" {% if achievement_membership.achievement_type == "Award"%} selected {% endif %}>Award</option>
+                </select>
+              </div>
+       
+
+          <div class="mb-3 col-md-6">
+            <label for="organization" class="form-label">Organization</label>
+            <input class="form-control" type="text" name="organization" id="organization" value="{{achievement_membership.organization}}" required />
+          </div>
+
+
+          <div class="mb-3 col-md-6">
+            <label for="year" class="form-label">Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="year"
+              name="year"
+              value="{{achievement_membership.year|date:'Y-m-d'}}"
+              required
+            />
+          </div>
+
+        </div>
+        <div class="row help-text text-center text-danger">
+
+        </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary me-2 ajax-submit">Save changes</button>
+        </div>
+
+</form>
+  

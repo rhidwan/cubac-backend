@@ -1,0 +1,106 @@
+{% load static %}
+<form action="{%if action %} {{action}} {% else %} {% url action_name %}{% endif %}" id="callForm" method="post" class="form">
+    {% csrf_token %}
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="title" class="form-label">Title</label>
+            <input
+              class="form-control"
+              type="text"
+              id="title"
+              name="title"
+              value="{{call_application.title}}"
+              required
+            />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="slug" class="form-label">Slug</label>
+            <input class="form-control" type="text" name="slug" id="slug" value="{{call_application.slug}}" required />
+          </div>
+
+          <div class="mb-3 col-md-12">
+            <label for="description" class="form-label">Description</label>
+            
+            <textarea class="form-control" id="description" name="description" form="callForm">{{call_application.description}}</textarea>
+           
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="start_date" class="form-label">Start Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="start_date"
+              name="start_date"
+              value="{{call_application.start_date|date:'Y-m-d'}}"
+              required
+            />
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="end_date" class="form-label">End Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="end_date"
+              name="end_date"
+              value="{{call_application.end_date|date:'Y-m-d'}}"
+              required
+            />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="to_date" class="form-label">ShortCode</label>
+            <input
+              type="text"
+              class="form-control"
+              id="shortcode"
+              name="shortcode"
+              value="{{call_application.shortcode}}"
+            />
+          </div>
+
+          
+          
+        </div>
+            <div class="row help-text text-center text-danger">
+
+    </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary me-2 ajax-submit">Save changes</button>
+
+        </div>
+
+</form>
+<!-- Include the required files --> 
+<script src="{% static 'vendor/ckeditor/ckeditor.js' %}"></script>
+
+<!-- Start simple MDE -->
+<script>
+     ClassicEditor
+        .create( document.querySelector( '#description' ), {
+            removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
+    } )
+        .catch( error => {
+            console.error( error );
+        } );
+   
+</script>
+
+<script>
+  
+  
+        
+    $(document).on('click','#is_current',function(){
+        var isChecked = $(this).is(':checked');
+        if (isChecked === true){
+
+            $('#to_date').attr('disabled','disabled');;
+        }else{
+
+            $('#to_date').removeAttr('disabled');
+        }
+    });
+        
+  
+</script>

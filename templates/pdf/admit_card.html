@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Title</title>
+    <style type="text/css">
+        @page {
+            size: a4;
+            margin: 0.2in 0.44in 0.2in 0.44in;
+        }
+        @media print{
+            *{
+                text-shadow:none!important;
+                color:#000!important;
+                background:transparent!important;
+                box-shadow:none!important;
+                font-size: small!important;
+            }
+
+    </style>
+    <link rel="stylesheet" href="{% static 'vendor/css/core.css' %}" />
+</head>
+
+
+<body class="bg-white text-dark">
+    
+    <div class="container">
+        
+        <div class="row d-flex align-items-center">
+            <div class="col-2">
+                <img  style="height: 100px; width:100px;" class=" img-fluid" src="{% static 'img/cu_logo.svg' %}" alt="">
+            </div>
+            <div class="col-7 text-center">
+               
+                <h3>
+                    Chittagong University Center for Business Administration (CUCBA) <br>Faculty of Business Administration <br> University of Chittagong
+                </h3>
+                
+                <h3>Application for Admission <br>
+                    Session: {{application.call_for_application.title}} 
+                </h3>
+            </div>
+            <div class="col-3 d-flex justify-content-end">
+                <img style="height: 150px; width:150px;" class=" img-fluid" src="{{ application.data.basic_info.0.photo }}" alt="">
+            </div>
+        </div>
+
+        <div class="row p-1">
+<div style="text-align:center;margin-top:20px;border:2px solid black;">Admit Card</div>
+        </div>
+ 
+
+        <div class="row p-1">
+          <div class="col-5"></div>
+          <div class="col-1"></div>
+          <div class="col-6"> <div class="float-end"><strong> Applicant Number</strong>: {{application.roll_no}}</div> </div>
+      </div>
+      <div class="row p-1">
+        <div class="col-5"><strong>Name of the Applicant</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.user.full_name}}</div>
+      </div>
+        <div class="row p-1">
+        <div class="col-5"><strong>Venue</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.seat.room}}</div>
+      </div>
+       <div class="row p-1">
+        <div class="col-5"><strong>Date </strong></div>
+          <div class="col-1">:</div>
+          <div class="col-6">June 10 (Friday), 2022</div>
+      </div>
+       <div class="row p-1">
+        <div class="col-5"><strong>Time</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">4 pm – 5 pm (Written Test) <br>5.30 pm
+                (Viva-Voce)</div>
+      </div>
+     
+
+        <div class="row mt-2">
+            <h4>Instructions & Information:</h4>
+            <ol>
+                <li>Print this Admit Card and bring it to
+                    the Examination Hall.</li>
+                <li >No examinee will be allowed to sit for the examination (Written & Viva)
+                    without the Admit Card.</li>
+                <li>Enter the examination hall 30 minutes before the exam time.</li>
+                <li>No examinee will be allowed to attend viva-voce without attending written
+                    test.</li>
+                <li>Written test & viva-voce will be held on the same day on June 10 (Friday),
+                    2022.</li>
+                <li><strong>Bring the original Certificates & Mark-sheets from SSC/Equivalence to
+                        Bachelor/Equivalence to produce to the Viva Board for verification.</strong></li>
+                <li>For Query/Assistance: 01943-109063; 01792-557086.</li>
+            </ol>
+
+        </div>
+      
+        <div class="row mt-5">
+            <div>
+                <div style="text-align:center;float:right;">
+                    Professor Dr. Md Moazzam Husain <br>
+                    Director <br>
+                    Chittagong University
+                    Center for Business Administration (CUCBA) <br>
+                    Faculty of Business Administration <br>
+                    University of Chittagong
+
+
+                </div>
+
+            </div>
+        </div>
+    
+    </div>
+
+
+
+
+</body>
+
+</html>

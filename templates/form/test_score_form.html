@@ -1,0 +1,34 @@
+
+<form action="{%if action %} {{action}} {% else %} {% url action_name %}{% endif %}" method="post" class="form">
+    {% csrf_token %}
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="test" class="form-label">Test</label>
+                <select class="form-select" id="test" name="test" aria-label="Select Type" required>
+                  <option value="GMAT" {% if test_score.test == "GMAT"%} selected {% endif %} >GMAT</option>
+                  <option value="GRE" {% if test_score.test == "GRE"%} selected {% endif %}>GRE</option>
+                  <option value="TOEFL" {% if test_score.test == "TOEFL"%} selected {% endif %}>TOEFL</option>
+                  <option value="IELTS" {% if test_score.test == "IELTS"%} selected {% endif %}>IELTS</option>
+                </select>
+              </div>
+     
+
+          <div class="mb-3 col-md-6">
+            <label for="score" class="form-label">Score</label>
+            <input class="form-control" type="text" name="score" id="score" value="{{test_score.score}}" required />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="score" class="form-label">Test Date</label>
+            <input class="form-control" type="date" name="test_date" id="test_date" value="{{test_score.test_date|date:'Y-m-d'}}" required />
+          </div>
+
+        </div>
+        <div class="row help-text text-center text-danger">
+
+        </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary me-2 ajax-submit">Save changes</button>
+
+        </div>
+      </form>

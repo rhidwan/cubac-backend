@@ -34,8 +34,11 @@ urlpatterns = [
     path('account/registration/verify-email/<str:key>/', confirm_email, name='account_confirm_email'),
 
     path('login/', user_view.user_login, name="login"),
+    path('register', user_view.user_registration, name="register"),
     path('logout/', user_view.user_logout, name="logout"),
     path('change_password/', user_view.change_password, name="change_password"),
+    path('update_user/', user_view.update_user_info, name="update_user_info"),
+    path('make_staff_account/', user_view.make_staff_account, name="make_staff_account"),
     # path('project/create_account/', user_view.create_account, name="create_account"),
     path('', include('home.urls')),
 

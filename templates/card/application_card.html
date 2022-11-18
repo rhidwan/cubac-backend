@@ -1,0 +1,67 @@
+{% load static %}
+
+<div class="card  border border-light mb-2">
+    <div class="card-header bg-default" id="application{{forloop.counter}}e">
+      <div class="row" data-toggle="collapse" data-target="#collapseapplication{{forloop.counter}}" aria-expanded="true"
+        aria-controls="collapseapplication{{forloop.counter}}">
+       
+        <div class="col-11">
+               
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        
+                        <img src="{% if application.data.basic_info.0.photo %}{{application.data.basic_info.0.photo}}
+                                    {% else %}
+                                        {% if application.data.user.geneder == '0' %}
+                                        {% static 'img/male_avatar.svg' %}
+                                        {% else %}
+                                        {% static 'img/female_avatar.svg' %}
+                                        {% endif %}
+                                    {% endif %}"
+                        alt="user-avatar" class="rounded" height="50" width="50" id="uploadedAvatar" />
+
+                        </div>
+
+                    <div class="flex-grow-1">
+                        <span class="fw-semibold d-block">{{application.user.full_name}}</span>
+                        <span class="font-weight-bold">Season: </span> {{application.call_for_application.title}} <br>
+                        <span class="font-weight-bold">Roll No: </span> {{application.roll_no}} <br>
+                        <span class="font-weight-bold">Transaction Id: </span> {{application.transaction.transaction_id|default:'None'}} <br>
+
+                    </div>
+                </div>
+ 
+        </div>
+       
+            <div class="col-1 d-flex justify-content-end align-items-center gap-1">
+               
+                <div class="dropdown">
+                    <button class="btn p-0" type="button" id="application{{forloop.counter}}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+          
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="application{{forloop.counter}}">
+                      
+                        <a href="{% url 'application_detail' application.id %}" class="dropdown-item">View </a>
+                    
+                        {% if application.seat %}
+                        <a href="{% url 'generate_admit_card' application.id%}" class="dropdown-item">Generate Admit Card</a>
+                        {% endif %}
+
+                        {% if application.transaction %}
+                        <a href="{% url 'generate_application_form' application.id%}" class="dropdown-item">Generate Application form</a>
+                        {% endif %}
+                        
+                    </div>
+                  </div>
+
+                
+    
+                
+            </div>
+
+        
+
+      </div>
+    </div>
+  </div>

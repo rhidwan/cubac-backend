@@ -1,0 +1,272 @@
+{% load static %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Title</title>
+    <style type="text/css">
+        @page {
+            size: a4;
+            margin: 0.2in 0.44in 0.2in 0.44in;
+        }
+        @media print{
+            *{
+                text-shadow:none!important;
+                color:#000!important;
+                background:transparent!important;
+                box-shadow:none!important;
+                font-size: small!important;
+            }
+
+    </style>
+    <link rel="stylesheet" href="{% static 'vendor/css/core.css' %}" />
+</head>
+
+
+<body class="bg-white text-dark">
+    
+<div class="container">
+        
+        <div class="row d-flex align-items-center">
+            <div class="col-2">
+                <img  style="height: 100px; width:100px;" class=" img-fluid" src="{% static 'img/cu_logo.svg' %}" alt="">
+            </div>
+            <div class="col-7 text-center">
+               
+                <h3>
+                    Chittagong University Center for Business Administration (CUCBA) <br>Faculty of Business Administration <br> University of Chittagong
+                </h3>
+                
+                <h3>Application for Admission <br>
+                    Session: {{application.call_for_application.title}} 
+                </h3>
+            </div>
+            <div class="col-3 d-flex justify-content-end">
+                <img style="height: 150px; width:150px;" class=" img-fluid" src="{{ application.data.basic_info.0.photo }}" alt="">
+            </div>
+        </div>
+    
+        <div class="row p-1">
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">Personal Data</div>
+        </div>
+        <div class="row p-1">
+          <div class="col-5"></div>
+          <div class="col-1"></div>
+          <div class="col-6"> <div class="float-end"><strong> Applicant Number</strong>: {{application.roll_no}}</div> </div>
+      </div>
+      <div class="row p-1">
+        <div class="col-5"><strong>Name (In Block Letters):</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.user.full_name}}</div>
+      </div>
+        <div class="row p-1">
+        <div class="col-5"><strong>Mother’s Name</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.mother_name}}</div>
+      </div>
+       <div class="row p-1">
+        <div class="col-5"><strong>Father's Name </strong></div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.father_name}}</div>
+      </div>
+       <div class="row p-1">
+        <div class="col-5"><strong>Date of Birth</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.user.date_of_birth}}</div>
+      </div>
+     <div class="row p-1">
+        <div class="col-5"><strong>Nationality</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.nationality}}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>National ID / Passport No.: </strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.nid_passport_no}}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>Gender</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{% if application.data.user.gender == '0' %}Female{% else %}Male{% endif %}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>Currently Employed?</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.is_employed|yesno:'Yes, No'}}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>Permanent Address</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.permanent_address}}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>Present Address </strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.present_address}}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>Mobile Number</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.phone_number}}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>Work Phone</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.basic_info.0.work_phone}}</div>
+      </div><div class="row p-1">
+        <div class="col-5"><strong>Email</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.data.user.email}}</div>
+      </div>
+      <div class="row p-1">
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">Academic Qualifications</div>
+        </div>
+        <div class="row mt-2">
+            
+    <table class="table table-bordered">
+    <thead>
+    <tr style="text-align:center;font-weight:bold;">
+      <td scope="col" class="col-2">Degree</td>
+      <td scope="col" class="col-4">Institution</td>
+      <td scope="col" class="col-2">Passing Year</td>
+      <td scope="col" class="col-2 ">Area/ Major</td>
+      <td scope="col" class="col-2">Division/ Class/ Gpa</td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for education in application.data.educational_backgrounds %}
+        <tr>
+      <td>{{education.degree}}</td>
+      <td>{{education.institute}}</td>
+      <td>{{education.passing_year}}</td>
+      <td>{{education.area_major}}</td>
+      <td>{{education.division_class_cgpa}}</td>
+      </tr>
+         {% endfor %}
+         
+          </tbody>
+    </table>
+        </div>
+      
+    <div class="row p-1">
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">Work Experience</div>
+        </div>
+        <div class="row mt-2">
+    <table class="table table-bordered">
+    <thead>
+    <tr style="text-align:center;font-weight:bold;">
+      <td scope="col" class="col-2">Position</td>
+      <td scope="col" class="col-4">Organization</td>
+      <td scope="col" class="col-4">Major Responsibilities</td>
+      <td scope="col" class="col-2 ">Duration (From - To)</td>
+    
+    </tr>
+    </thead>
+    <tbody>
+        {% for work_experience in application.data.work_experiences %}
+    <tr >
+      <td>{{work_experience.post}}</td>
+      <td>{{work_experience.organization}</td>
+      <td>{{work_experience.major_responsibilities}}</td>
+      <td>{{work_experience.from_date}} - {{work_experience.to_date}}</td>
+    </tr>
+    {% endfor %}
+          </tbody>
+    </table>
+        </div>
+      
+       
+       
+    <div class="row p-1">
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">GMAT/GRE/TOEFL/IELTS Information (if applicable)</div>
+        </div>
+        <div class="row mt-2">
+            
+    <table class="table table-bordered">
+    <thead>
+    <tr style="text-align:center;font-weight:bold;">
+      <td scope="col" class="col-4">Test</td>
+      <td scope="col" class="col-4">Test Score:</td>
+      <td scope="col" class="col-4">Test Date: </td>
+    
+    
+    </tr>
+    </thead>
+    <tbody>
+    {% for test_score in application.data.test_scores %}
+        <tr>
+      <td>{{test_score.test}}</td>
+      <td>{{test_score.score}}</td>
+      <td>{{test_score.test_date}}</td>
+    </tr>
+    {% endfor %}
+    
+          </tbody>
+    </table>
+        </div>
+    
+    <div class="row p-1">
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">Achievements, Memberships & Activities (Optional)</div>
+        </div>
+        <div class="row mt-2">
+            
+    <table class="table table-bordered">
+    <thead>
+       
+    <tr style="text-align:center;font-weight:bold;">
+      <td scope="col" class="col-4">Achievement/ Membership/ Activity</td>
+      <td scope="col" class="col-5">Organization/ Field</td>
+      <td scope="col" class="col-3">Year </td>
+    </tr>
+
+    </thead>
+    <tbody>
+        {% for achievement_membership in application.data.achievements %}
+    <tr>
+      <td>{{achievement_membership.achievement_type}}</td>
+      <td>{{achievement_membership.organization}}</td>
+      <td>{{achievement_membership.year}}</td>
+    </tr>
+    {% endfor %}
+          </tbody>
+    </table>
+        </div>
+    
+    
+    <div class="row p-1">
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">Declaration</div>
+        </div>
+        <div class="row mt-2">
+          <p class="border border-dark font-italic">“The information provided in this application form is true and correct. I accept that CUCBA reserves the right to restrict my admission or cancel my registration at any time if any item of information given by me on this form is found to be false or incorrect.”</p>
+        </div>
+    
+    
+    <div class="row p-1">
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">Application Fees Payment Information (Please Pay Tk. 500/- through Bkash)</div>
+        </div>
+        <div class="row mt-2">
+         <div class="row p-1">
+        <div class="col-5"><strong>Bkash Mobile Number</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.transaction.transaction_from}}</div>
+      </div>
+          <div class="row p-1">
+        <div class="col-5"><strong>Transaction ID</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.transaction.transaction_id}}</div>
+      </div>
+          <div class="row p-1">
+        <div class="col-5"><strong>Payment Date</strong> </div>
+          <div class="col-1">:</div>
+          <div class="col-6">{{application.transaction.transaction_time}}</div>
+      </div>
+        </div>
+    
+    <div class="row p-1 mt-5 float-end">
+    <div >________________________ <br>Signature of CUCBA Official</div>
+        </div>
+    
+    
+    
+    </div>
+    
+</body>
+
+</html>
+
+
+

@@ -1,24 +1,23 @@
 from django import forms
 from .models import User
-
-from django import forms
 from django.core.exceptions import ValidationError
  
  
-class ClientUserCreationForm(forms.Form):
-    mobile_no = forms.CharField(label='Enter Mobile No', min_length=8, max_length=20)
-    name = forms.CharField(label="Name", max_length=200)
+class UserRegistrationForm(forms.Form):
+    GENDER_CHOICES = [(0, 'Male'), (1, 'Female'), (2, 'Other')]
+    email = forms.EmailField(label='Enter email', min_length=8, max_length=50)
+    full_name = forms.CharField(label="Name", max_length=200)
     password1 = forms.CharField(label='Enter password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)
-    designation = forms.CharField(label="Designation", max_length=200, required=False)
-    department = forms.CharField(label="Department", max_length=200, required=False)
+    date_of_birth = forms.DateField(label="Date Of Birth", required=False)
+    gender = forms.ChoiceField(label="Gender", choices=GENDER_CHOICES) 
  
-    def clean_mobile_no(self):
-        mobile_no = self.cleaned_data['mobile_no'].lower()
-        r = User.objects.filter(mobile_no=mobile_no)
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+        r = User.objects.filter(email=email)
         if r.count():
-            raise  ValidationError("Mobile No already exists")
-        return mobile_no
+            raise  ValidationError("Email already exists")
+        return email
  
  
     def clean_password2(self):
@@ -32,12 +31,15 @@ class ClientUserCreationForm(forms.Form):
  
     def save(self, commit=True):
         user = User.objects.create_user(
-            mobile_no = self.cleaned_data['mobile_no'],
-            name= self.cleaned_data['name'],
+            email = self.cleaned_data['email'],
+            full_name= self.cleaned_data['full_name'],
             password=self.cleaned_data['password1'],
-            user_type=0,
-            designation=self.cleaned_data['designation'],
-            department=self.cleaned_data['department']
+            date_of_birth=self.cleaned_data['date_of_birth'],
+            gender=self.cleaned_data['gender']
         )
         return user
 
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('date_of_birth', 'gender', 'full_name', )

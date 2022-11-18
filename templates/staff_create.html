@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 offset-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold er text-primary">Enter email to make staff user
+                
+                          </h6>
+                        </div>
+                    
+                        <div class="card-body">
+                            
+                                
+                            <form action="{% url 'make_staff_account' %}" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input
+                                          type="email"
+                                          class="form-control"
+                                          id="email"
+                                          name="email"
+                                          placeholder="Insert Email to add staff"
+                                          autofocus
+                                        />
+                                      </div>
+                                </div>
+                                <div class="row help-text text-center text-danger">
+
+                                </div>
+                                    <div class="mt-2">
+                                      <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                            
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,163 @@
+
+<form id="seat_plan_form" action="{%if action %} {{action}} {% else %} {% url action_name %}{% endif %}" method="post" class="form">
+    {% csrf_token %}
+    <div id="entries"></div>
+
+
+    <script id="template_add_room_capacities" type="text/template">
+        <div class="row">
+            <div class="mb-3 col-md-5">
+                <input class = "form-control" name="room" type = "text" 
+                placeholder = "Venue/Room" required = "required"/>
+            </div>
+             <div class="mb-3 col-md-5">
+                <input class = "form-control" name="capacity" type = "text" 
+                placeholder = "Capacity" required = "required"/>
+            </div>
+       
+            <div class = "entry col-md-2 text-center">
+                <button class="btn btn-outline-primary btn-add" type="button">
+                    <i class="menu-icon tf-icons bx bx-plus"></i>
+                </button>
+            </div>
+        </div>
+    </script>
+    
+
+    <div class="mt-2">
+        <button id="array_submit"  type="submit" class="btn btn-primary me-2">Save changes</button>
+
+    </div>
+      
+</form>
+
+<script>
+    $(function() {
+    //console.log($('#template_add_room_capacities'));
+    var clone = function(tmpl) {
+            return $((tmpl.clone()).html())
+        },
+        $template = $('#template_add_room_capacities'),
+        formArray = [ clone($template) ], // init array with first row
+        $formEntries = $('#entries');
+    
+    $(document).on('click', '.btn-add', function() {
+        //console.log('clicked');
+        formArray.push(clone($template));
+        updateForm();
+        // set focus to adding row = last element in array
+        $(formArray).last()[0]
+            .find('input')
+            .first()
+            .focus();
+    });
+    
+    // remove not working yet
+    
+    $(document).on('click', '.btn-remove', function(evt) {
+        var id;
+        // iterate over formArray to find the currently clicked row
+        $.each(formArray, function(index, row) {
+            //console.log(index, row.has(evt.currentTarget).length);
+            if ( row.has(evt.currentTarget).length == 1 ) {
+                //console.log(row.has(evt.currentTarget));
+                id = index; // click target in current row
+                return false; // exit each loop
+            }
+        });
+        
+        //console.log('clicked', id);
+        formArray.splice(id, 1);
+        updateForm();
+    });
+    
+    var updateForm = function() {
+        // redraw form --> problem values are cleared!!
+        //console.log(formArray);
+        var lastIndex = formArray.length - 1,
+            name; // stores current name of input
+        
+        $formEntries.empty(); // clear entries from DOM becaue we re-create them
+        $.each(formArray, function(index, $input) {
+            //console.log(index, $input);
+            // update names of inputs and add index
+            //console.log('inputs', $input.find('input'));
+            $.each($input.find('input'), function(inputIndex, input) {
+                name = $(input).attr('name').replace(/\d+/g, ''); // remove ids
+                $(input).attr('name', name + index);
+            });
+            
+            if (index < lastIndex) {
+                // not last element --> change button to minus
+                //console.log($input.find('.btn-add'));
+                $input.find('.btn-add')
+                     .removeClass('btn-add').addClass('btn-remove')
+                     .removeClass('btn-outline-primary').addClass('btn-outline-danger')
+                     .html('<i class="menu-icon tf-icons bx bx-minus"></i>');
+            }
+            
+            $formEntries.append($input);
+        });
+    };
+    
+    updateForm(); // first init. of form
+    
+    $('form#seat_plan_form').submit(function(evt) { 
+        evt.preventDefault();
+        var rooms_and_capacities = [];
+        let btn = $(this).find("#array_submit");
+        let help_elm = $(this).find(".help-text");
+        let btn_html = btn.html();
+
+
+
+        btn.prop("disabled", true);
+        btn.html(
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+        );
+
+        var fields = $(this).serializeArray();
+
+        
+        console.log(fields);
+
+        console.log(rooms_and_capacities);
+        var form = $(this);
+        var url = form.attr("action").replace("/undefined/", "");
+
+        console.log(url);
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: fields, // serializes the form's elements.
+            indexValue: { btn: btn, btn_html: btn_html , help_elm:help_elm},
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+                var res = JSON.parse(JSON.stringify(data));
+                console.log(res);
+                this.indexValue.btn.prop("disabled", false);
+                this.indexValue.btn.html(this.indexValue.btn_html);
+
+                if (res["status"] == "error") {
+                this.indexValue.help_elm.text(res["msg"]);
+                } else {
+                location.reload();
+                }
+            },
+            error: function (data) {
+                var res = JSON.parse(JSON.stringify(data));
+                this.indexValue.btn.prop("disabled", false);
+                this.indexValue.btn.html(this.indexValue.btn_html);
+
+                if (res["status"] == "error") {
+                this.indexValue.help_elm.text(res["msg"]);
+                }
+            },
+            });
+
+    });
+});
+</script>
+  

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% load encode_static %}
+
+{% block title %}
+Season | CUBAC
+{% endblock title %}
+
+
+
+
+{% block breadcrumb %}
+<div class="d-flex justify-content-between align-items-baseline">   
+    <h4 class="fw-bold py-2">
+      <span class="text-muted fw-light"></span>{{ open_application.title }}
+     </h4>
+     <div class="d-flex justify-content-center align-items-center">
+        {% if not request.user.is_staff %}
+      <a 
+      href="{% url 'apply_for_call_application' open_application.id %}"
+      class="btn btn-primary ">
+        Apply Now
+      </a>
+      {% else %}
+      <div class="col-4 d-flex justify-content-end align-items-center gap-1">
+        <a data-url="{% url 'edit_open_application_detail' open_application.id %}" data-bs-toggle="modal"
+        data-title="Edit Season" data-bs-target="#UpdateFormModal" class="btn btn-outline-dark">
+        <!-- <i class="bx bx-edit"></i> -->
+        <span class="">Edit</span>
+        </a>
+         <!-- <span class="d-none d-md-block">Edit</span> -->
+
+
+          <a href="{% url 'edit_open_application_detail' open_application.id %}"  class="ajax-delete btn btn-outline-danger">
+            <!-- <i class="bx bx-trash "></i> -->
+            <span class="">Delete</span>
+             </a>
+        </div>
+
+     
+
+    {% include 'modal/edit_form_modals.html' %}
+      {% endif %}
+    </div>
+</div>
+
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<div class="row">
+    {% if request.user.is_staff %}
+    <div class="col-sm-4 col-xs-6 mb-4">
+        {% url 'applications' as action_url %}
+
+        {% with '?season='|addstr:open_application.id as suffix %}
+        {% include 'card/micro_card.html' with title="Number of Applicants" info=num_applicants btn_text="View All" action_url=action_url|addstr:suffix %}
+        {% endwith %}
+      </div>
+
+      <div class="col-sm-4 col-xs-6 mb-4">
+        {% url 'applications' as action_url %}
+
+        {% concat_all action_url '?season=' open_application.id '&status=pending' as suffix %}
+        {% include 'card/micro_card.html' with title="Pending Approval" info=pending_approval btn_text="View All" action_url=suffix  %}
+       
+      </div>
+
+      <div class="col-sm-4 col-xs-6 mb-4">
+        {% url 'list_transaction' as action_url %}
+
+        {% concat_all action_url '?season=' open_application.id as suffix %}
+        {% include 'card/micro_card.html' with title="Paid" info=payment_done btn_text="View All" action_url=suffix %}
+      </div>
+    {% else%}
+
+        {% if applications %}
+    <div class="col-sm-4 col-xs-6 mb-4">
+        {% url 'application_detail' applications.0.id as action_url %}
+        {% if applications.0.is_appproved %}
+            {% include 'card/micro_card.html' with title="Application Status" info="Approved" btn_text="View" action_url=action_url %}
+        {% else %}
+            {% include 'card/micro_card.html' with title="Application Status" info="Not Approved" btn_text="View" action_url=action_url %}
+        {% endif %}
+    </div>
+
+    <div class="col-sm-4 col-xs-6 mb-4">
+        {% url 'application_transaction' applications.0.id  as action_url %}
+        {% if transactions %}
+            {% url 'transaction_detail' transactions.0.id as trx_action_url %}
+            {% if  transactions.0.is_appproved %}
+            
+                {% include 'card/micro_card.html' with title="Payment Status" info="Approved" btn_text="View" action_url=trx_action_url %}    
+            {% else %}
+                {% include 'card/micro_card.html' with title="Payment Status" info="Not Approved Yet" btn_text="View" action_url=trx_action_url %}    
+            {% endif %}
+        {% else %}
+            {% include 'card/micro_card.html' with title="Payment Status" info="Not Paid" btn_text="Add Payment" modal="modaltx" action_url=action_url %}
+            {% include 'modal/form_modals.html' with modal_id="modaltx" title="New Transaction Entry" form="transaction" action=action_url  %}
+        {% endif %}
+      </div>
+        {% endif %}
+    {% endif %}
+
+</div>
+<div class="row">
+    <div class="col-lg-12 mb-4 order-0">
+      <div class="card">
+            <div class="card-body">
+                <div class="">
+                    <div class="row">
+                        {{open_application.description|safe}}
+                    </div>
+                </div>
+                 
+            </div>
+      </div>
+ 
+    </div>
+</div>
+
+{% endblock content %}

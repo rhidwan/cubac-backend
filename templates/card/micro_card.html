@@ -1,0 +1,20 @@
+<div class="card mb-3">
+    <div class="card-body">
+
+      <h5 class="card-title"><span class=""></span>{{title}}</h5>
+      <p class="card-text">{{info}}</p>
+    {% if modal %}
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+        data-bs-target="#{{modal}}">
+        <span class="d-none d-sm-block">{{btn_text}}</span>
+        </button>
+    {% else %}
+        {% if btn_text %}
+            <a href="{{action_url}}" class="btn btn-outline-primary">{{btn_text}}</a>
+            {% else %}
+            <a href="{{action_url}}" class="btn btn-outline-primary"></a>
+        {% endif %}
+    {% endif %}
+      
+    </div>
+  </div>

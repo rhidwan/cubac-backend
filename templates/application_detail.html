@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Application | CUBAC
+{% endblock title %}
+
+{% block content %}
+
+
+<div class="row" data-masonry='{"percentPosition": true }'>
+    <div class="col-md-6 col-sm-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                {% if application.data.basic_info %}
+                {% include 'card/basic_info_card.html' with basic_info=application.data.basic_info.0 user=application.data.user%}
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+        <div class="col-md-6 col-sm-12">
+    
+                {% if application.transaction %}
+                <div class="card mb-3">
+            <div class="card-body">
+              
+                {% include 'card/transaction_detail_card.html' with transaction=application.transaction %}
+
+            </div>
+        </div>
+        {% else %}
+                {% url 'application_transaction' application.id  as action_url %}
+                <div class="text-center">
+                    {% include 'card/micro_card.html' with title="Payment Status" info="Not Paid" btn_text="Add Payment" modal="modaltx" action_url=action_url %}
+                    {% url 'application_transaction' application.id  as action_url %}
+                    
+                    {% include 'modal/form_modals.html' with modal_id="modaltx" title="New Transaction Entry" form="transaction" action=action_url  %}
+                   
+                </div>
+                {% endif %}
+
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Educational Background</h5>
+
+            </div>
+
+            <div class="card-body">
+
+                {% if application.data.educational_backgrounds %}
+                {% for education in application.data.educational_backgrounds %}
+                {% include 'card/educational_background_card.html' with education=education disable_action=True %}
+                {% endfor %}
+                {% else %}
+                {% include 'card/nodata_small.html' %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Test Score</h5>
+
+            </div>
+            <div class="card-body">
+                {% if application.data.test_scores %}
+                {% for test_score in application.data.test_scores %}
+                {% include 'card/test_score_card.html' with test_score=test_score disable_action=True %}
+                {% endfor %}
+                {% else %}
+                {% include 'card/nodata_small.html' %}
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+
+        <div class="card mb-3">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Achievement/ Membership</h5>
+
+            </div>
+
+            <div class="card-body">
+                {% if application.data.achievements %}
+                {% for achievement in application.data.achievements %}
+                    {% include 'card/achievement_membership_card.html' with achievement_membership=achievement disable_action=True %}
+                {% endfor %}
+                {% else %}
+                {% include 'card/nodata_small.html' %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Work Experience</h5>
+
+            </div>
+            <div class="card-body">
+                {% if application.data.work_experiences %}
+                {% for work_experience in application.data.work_experiences %}
+                {% include 'card/work_experience_card.html' with work_experience=work_experience disable_action=True%}
+                {% endfor %}
+                {% else %}
+                {% include 'card/nodata_small.html' %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<script src="{% static 'vendor/masonry/masonry.pkgd.min.js' %}"></script>
+
+
+{% endblock content %}

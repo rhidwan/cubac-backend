@@ -1,0 +1,76 @@
+{% load static %}
+{% load encode_static %}
+
+<div class="card border border-light mb-2">
+  <div class="card-header bg-default">
+    <div class="row">
+      <div class="">
+          
+        <div class="text-center">
+            <div class="flex-shrink-0 me-3">
+                
+                <img src="{% static 'img/season.svg' %}"
+                              
+                alt="grad-hat-avatar" class="rounded" height="50" width="50" id="gradHatAvatar" />
+
+                </div>
+
+            <div class="flex-grow-1">
+              
+              <h5 class="fw-semibold d-block">{{season.title}}</h5>
+              {% regroup season.application_set.all by seat as seat_group %}
+              
+              <div class="row">
+                <div class="col-6 text-end">Number of Applicants</div>
+                <div class="col-1">:</div>
+                <div class="col-5 text-start">{{season.application_set.count}}</div>
+              </div>
+              <div class="mt-1"><span class="fw-semibold"></span> </div>
+              {% if seat_group %}
+              {% for group in seat_group %}
+              <div class="row">
+                <div class="col-6 text-end">{{group.grouper.room|default:"Not allocated"}}</div>
+                <div class="col-1">:</div>
+                <div class="col-5 text-start">{{group.list|length}}</div>
+              </div>
+              {% endfor %}
+              {% else %}
+              <div class="row">
+                <div class="col-6 text-end"> Not allocated</div>
+                <div class="col-1">:</div>
+                <div class="col-5 text-start"> {{season.application_set.count}}</div>
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="mt-2">
+              <a href="?season={{season.id}}" class="btn btn-outline-secondary">View</a>
+
+     
+              {% concat_all "modalseatplan" season.id as modalid %}
+              {% if request.user.is_staff %}
+              <button 
+              type="button" 
+              class="btn btn-outline-primary"  
+              data-bs-toggle="modal"
+              data-bs-target="#{{modalid}}">
+              <i class="bx bx-list-plus d-block d-sm-none"></i>
+              <span class="d-none d-sm-block">Add New</span>
+            </button>
+            {% endif %}
+          </div>
+          
+            {% url 'seat_plan_detail' season.id as seat_plan_generate %}
+
+    {% include 'modal/form_modals.html' with modal_id=modalid title="New Seat Plan" form="seat_plan_form" action=seat_plan_generate  %}
+
+        </div>
+
+      </div>
+
+     
+    
+  </div>
+</div>
+
+</div>

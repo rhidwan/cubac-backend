@@ -1,0 +1,57 @@
+{% load static %}
+<div class="table-responsive text-nowrap" >
+    <table class="table card-table table-hover" id="payment-table">
+      <thead>
+        <tr>
+          <th>Application</th>
+          <th>Venue</th>
+
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        {% for application in applications %}
+        <tr>
+          <td>
+            <a href="{% url 'application_detail' application.id %}" class="text-primary">{{application.roll_no}}</a>
+        </td>
+        <td>{{application.seat.room|default:"Not Allocated"}}</strong></td>
+        </tr>
+       {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+  <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
+
+
+  <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendor/datatables/dataTables.bootstrap5.min.js' %}"></script>
+
+
+  {% if split_search == True  %}
+  <script>
+$(document).ready(function () {
+    var table = $('#payment-table').DataTable({ 
+          paging: false,
+            info:false
+          });
+
+    $('#table-search').keyup(function () {
+        table.search($(this).val()).draw();
+    });
+});
+  </script>
+  
+{% else %}
+
+<script>
+ 
+  $(document).ready(function () {
+    $('#payment-table').DataTable({
+      paging: false,
+        info:false
+    });
+  });
+</script>
+
+{% endif %}

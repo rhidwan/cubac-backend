@@ -1,0 +1,85 @@
+{% load static %}
+<div class="table-responsive text-nowrap" >
+    <table class="table card-table table-hover" id="payment-table">
+      <thead>
+        <tr>
+          <th>Trx Id</th>
+          <th>Method</th>
+          <th>Amount</th>
+          <th>From</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Application</th>
+        
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        {% for transaction in transactions %}
+        <tr>
+          <td>{{transaction.transaction_id}}</strong></td>
+          <td>{{transaction.transaction_method}}</td>
+          <td>{{transaction.amount}}</td>
+          <td>{{transaction.transaction_from}}</td>
+          <td>{% if transaction.is_approved %}<i class="bx bx-check-circle bx-sm align-middle text-success"></i>{% else %}<i class="bx bx-time bx-sm align-middle text-warning"></i>{% endif %}</td>
+          <td> {{transaction.transaction_time}} </td>
+          <td>
+
+            {% if transaction.application_set.all.0.id %}
+            <a href="{% url 'application_detail' transaction.application_set.all.0.id %}" class="text-primary">{{transaction.application_set.all.0.roll_no}}</a>
+            {% else %}
+            {{transaction.application.roll_no}}
+            {% endif %}
+        </td>
+         
+
+ 
+         
+          <td>
+            <div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+             
+            </div>
+          </td>
+        </tr>
+       {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+  <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
+
+
+  <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendor/datatables/dataTables.bootstrap5.min.js' %}"></script>
+
+
+  {% if split_search == True  %}
+  <script>
+$(document).ready(function () {
+    var table = $('#payment-table').DataTable({ 
+          paging: false,
+            info:false
+          });
+
+    $('#table-search').keyup(function () {
+        table.search($(this).val()).draw();
+    });
+});
+  </script>
+  
+{% else %}
+
+<script>
+ 
+  $(document).ready(function () {
+    $('#payment-table').DataTable({
+      paging: false,
+        info:false
+    });
+  });
+</script>
+
+{% endif %}

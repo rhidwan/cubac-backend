@@ -1,0 +1,97 @@
+
+<form action="{%if action %} {{action}} {% else %} {% url action_name %}{% endif %}" method="post" class="form">
+    {% csrf_token %}
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="post" class="form-label">Position</label>
+            <input
+              class="form-control"
+              type="text"
+              id="post"
+              name="post"
+              value="{{work_experience.post}}"
+              required
+            />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="organization" class="form-label">Organization</label>
+            <input class="form-control" type="text" name="organization" id="organization" value="{{work_experience.organization}}" required />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="major_responsibilities" class="form-label">Major Responsibilities</label>
+            <input
+              class="form-control"
+              type="text"
+              id="major_responsibilities"
+              name="major_responsibilities"
+              value="{{work_experience.major_responsibilities}}"
+            />
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="from_date" class="form-label">From Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="from_date"
+              name="from_date"
+              value="{{work_experience.from_date|date:'Y-m-d'}}"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="is_current" {% if work_experience.is_current %} Checked {% endif %}  />
+              <label class="form-check-label" for="is_current"> I am currently Working Here </label>
+            </div>
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="to_date" class="form-label">To Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="to_date"
+              name="to_date"
+              value="{{work_experience.to_date|date:'Y-m-d'}}"
+            />
+          </div>
+
+          
+          
+        </div>
+            <div class="row help-text text-center text-danger">
+
+    </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary me-2 ajax-submit">Save changes</button>
+
+        </div>
+   
+</form>
+  
+
+<script>
+  
+        if($('#is_current').is(':checked')){
+            console.log("Disabling");
+            $('#to_date').attr('disabled','disabled');;
+        }
+
+        
+    $(document).on('click','#is_current',function(){
+        var isChecked = $(this).is(':checked');
+        if (isChecked === true){
+
+            $('#to_date').attr('disabled','disabled');;
+        }else{
+
+            $('#to_date').removeAttr('disabled');
+        }
+    });
+        
+  
+</script>

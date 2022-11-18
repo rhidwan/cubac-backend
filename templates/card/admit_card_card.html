@@ -1,0 +1,46 @@
+{% load static %}
+<div class="card border border-light mb-2">
+  <div class="card-header bg-default">
+    <div class="row">
+      <div class="col-12">
+               
+        <div class="text-center">
+            <div class="flex-shrink-0 me-3">
+                
+                <img src="{% static 'img/season.svg' %}"
+                              
+                alt="grad-hat-avatar" class="rounded" height="50" width="50" id="gradHatAvatar" />
+
+                </div>
+
+            <div class="flex-grow-1">
+              <h5 class="fw-semibold d-block">{{open_application.title}}</h5>
+              <span class="font-weight-bold ">{% if open_application.is_open %}</span>Ending At: {{open_application.end_date}} {% else %} Starting at: {{open_application.start_date}} {% endif %}<br>
+
+            </div>
+            {% if request.user.is_staff %}
+            <div class="mt-2">
+             <a href="{% url 'generate_bulk_admit_card' open_application.id %}" class="btn btn-outline-primary"> <i class="menu-icon tf-icons bx bx-download"></i>All Admit Card</a>
+            </div>
+            
+            <div class="mt-2">
+             <a href="{% url 'generate_bulk_application_form' open_application.id %}" class="btn btn-outline-primary"> <i class="menu-icon tf-icons bx bx-download"></i>All Application Form</a>
+            </div>
+            {% else %}
+            <div class="mt-2">
+                <a href="{% url 'generate_admit_card' application.id %}" class="btn btn-outline-primary"> <i class="menu-icon tf-icons bx bx-download"></i>Admit Card</a>
+               </div>
+               <div class="mt-2">
+                <a href="{% url 'generate_application_form' application.id%}" class="btn btn-outline-primary"> <i class="menu-icon tf-icons bx bx-download"></i>Application Form</a>
+               </div>
+            {% endif %}
+        </div>
+
+      </div>
+
+     
+    
+  </div>
+</div>
+
+</div>

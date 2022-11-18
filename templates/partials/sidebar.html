@@ -1,0 +1,173 @@
+{% load static %}
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+      <a href="{% url 'dashboard' %}" class="app-brand-link">
+        <span class="app-brand-logo demo">
+          
+        </span>
+        <span class="app-brand-text demo menu-text fw-bolder ms-2">CUCBA</span>
+      </a>
+
+      <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+      </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1 ps ps--active-y">
+      <!-- Dashboard -->
+      <li class="home-menu menu-item">
+        <a href="{% url 'dashboard' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-home-circle"></i>
+          <div data-i18n="Analytics">Dashboard</div>
+        </a>
+      </li>
+
+      <!-- Layouts -->
+      
+
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Application</span>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'open_applications' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-sun"></i>
+          
+          <div data-i18n="Authentications">Seasons</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'applications' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user-pin"></i>
+          <div data-i18n="Account Settings">Applications</div>
+        </a>
+
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'admit_card' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-card"></i>
+          <div data-i18n="Authentications">Admit Card</div>
+        </a>
+      </li>
+      {% if request.user.is_staff %}
+      <li class="menu-item">
+        <a href="{% url 'seat_plan' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-sitemap"></i>
+          <div data-i18n="Authentications">Seat Plan</div>
+        </a>
+      </li>
+      {% endif %}
+      <li class="menu-item">
+        <a href="{% url 'list_transaction' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-credit-card"></i>
+          <div data-i18n="Authentications">Transaction</div>
+        </a>
+      </li>
+
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Misc</span>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'profile' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user"></i>
+          <div data-i18n="Layouts">Profile</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx bx-bell"></i>
+          <div data-i18n="Authentications">Notice</div>
+        </a>
+      </li>
+    </ul>
+    <div class="menu-inner-shadow"></div>
+    <div class="menu-footer py-1">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-10 d-flex align-items-center mx-0">
+          <div class=" ms-2 me-1">
+            <div class="avatar">
+              <div>
+                <img src="{% if request.user.basic_info.photo %}{% if request.user.basic_info.photo.url %}{{request.user.basic_info.photo.url}}{%else%}{{request.user.basic_info.photo}}{% endif %}{% else %}
+                                {% if request.user.gender == 0 %}
+                                {% static 'img/male_avatar.svg' %}
+                                {% else %}
+                                {% static 'img/female_avatar.svg' %}
+                                {% endif %}
+                            {% endif %}" alt="user-avatar" class="rounded" height="150" width="150" id="uploadedAvatar" />
+                </div>
+            </div> 
+          </div>
+          <div class="">
+            <div class="fw-semibold d-inline-block truncate">{{request.user.full_name}}</div>
+            <div class="d-inline-block small truncate">{{request.user.email}}</div>
+          </div>
+        </div>
+        <div class="col-2 text-start">
+          <div class="dropup">
+            <span class="dropdown-toggle hide-arrow me-2" data-bs-toggle="dropdown">
+              <i class="menu-icon tf-icons bx bx-dots-vertical"></i>
+            </span>
+            <ul class="dropdown-menu dropdown-menu-start">
+              {% if request.user.is_staff %}
+              <li>
+                <a class="dropdown-item" href="{% url 'make_staff_account' %}" >
+                  <i class="bx bx-user me-2"></i>
+                  <span class="align-middle">Create Staff Account</span>
+                </a>
+              </li>
+              {% endif %}
+              <li>
+                <a class="dropdown-item" href="{% url 'update_user_info' %}" >
+                  <i class="bx bx-user me-2"></i>
+                  <span class="align-middle">Change Account Info</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'change_password' %}">
+                  <i class="bx bx-key me-2"></i>
+                  <span class="align-middle">Change Password</span>
+                </a>
+              </li>
+              <li>
+                <div class="dropdown-divider"></div>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'logout' %}">
+                  <i class="bx bx-power-off me-2"></i>
+                  <span class="align-middle">Log Out</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+  
+        </div>
+      </div>
+     
+      
+    </div>
+
+  </aside>
+
+  <script>
+    $(document).ready(function(){
+      var path = window.location.pathname;
+      if (path == "/") {
+            $('.home-menu').addClass('active'); //#home is the id for root link.
+      }else{
+        $('li.menu-item').each(function(){
+        console.log($(this));
+        if ($(this).find('a').attr("href").indexOf(path) !== -1 ){
+          console.log($(this));
+          $(this).addClass('active')
+        }
+      })
+      }
+
+      
+
+     
+    });
+
+
+  </script>

@@ -1,0 +1,58 @@
+
+
+
+<form action="{% url 'update_user_info' %}" method="post" class="form">
+    {% csrf_token %}
+    <div class="row">
+        <div class="mb-3 col-md-6">
+            <label for="name" class="form-label">Full Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="full_name"
+              placeholder="Enter your Full Name"
+              value="{{request.user.full_name}}"
+              autofocus
+            />
+        </div>
+        
+        <div class="mb-3">
+            <label for="dob" class="form-label">Date Of Birth</label>
+            <input
+            type="date"
+            class="form-control"
+            id="dob"
+            name="date_of_birth"
+            placeholder="Enter your Birth Date"
+            value="{{request.user.date_of_birth|date:'Y-m-d'}}"
+            autofocus
+            />
+        </div>
+
+        <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="gender1" value="0" {% if request.user.gender == 0 %} checked {% endif %}>
+                <label class="form-check-label" for="gender0">Male</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="gender2" value="1" {% if request.user.gender == 1 %} checked {% endif %}>
+                <label class="form-check-label" for="gender1">Female</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="gender3" value="2" {% if request.user.gender == 2 %} checked {% endif %}>
+                <label class="form-check-label" for="gender3">Other</label>
+              </div>
+          </div>
+        
+    </div>
+    <div class="row help-text text-center text-danger">
+
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary me-2 ajax-submit">Save changes</button>
+
+    </div>
+</form>
+
