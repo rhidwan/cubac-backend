@@ -29,3 +29,18 @@ def addstr(arg1, arg2):
 def concat_all(*args):
     """concatenate all args"""
     return ''.join(map(str, args))
+  
+
+@register.simple_tag
+def get_object_count(*args):
+    objects = args[0]
+    attribute = args[1]
+    value = args[2]
+    try:
+        if value:
+            return len([x for x in objects if  getattr(x, attribute)  == value])
+        else:
+            return len([x for x in objects if getattr(x, attribute)])
+    except Exception as e:
+        print(e)
+        return 0

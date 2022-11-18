@@ -27,7 +27,7 @@ Dashboard | CUBAC
 
     <div class="col-sm-4 col-xs-6 mb-4">
       {% url 'applications' as action_url %}
-
+      {% get_object_count open_applications.0.application_set.all 'is_approved' True as pending_approval%}
       {% concat_all action_url '?season=' open_applications.0.id '&status=pending' as suffix %}
       {% include 'card/micro_card.html' with title="Pending Approval" info=pending_approval btn_text="View All" action_url=suffix  %}
      
@@ -35,6 +35,7 @@ Dashboard | CUBAC
 
     <div class="col-sm-4 col-xs-6 mb-4">
       {% url 'list_transaction' as action_url %}
+      {% get_object_count open_applications.0.application_set.all 'is_payment_done' True as payment_done %}
 
       {% concat_all action_url '?season=' open_applications.0.id as suffix %}
       {% include 'card/micro_card.html' with title="Paid" info=payment_done btn_text="View All" action_url=suffix %}
