@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from django.urls import reverse_lazy
-from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))).parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+DEBUG = False
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,11 +27,61 @@ SECRET_KEY = '==#x$1w7a)hc5n37mzh$5v!tz*pp_zef3=4yo5l-5_@%%vpa-_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
+
+# print("base dir prod", BASE_DIR)
+# ALLOWED_HOSTS = ['www.cubac.online']
+
+
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework.authtoken',
+    
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_framework',
+    'rest_auth',
+    'rest_auth.registration',
+    'crispy_forms',
+    'user',
+    'functions',
+    'home',
+    
+    'profiles',
+    'call_applications',
+    'applications',
+
+
+]
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'cucba',
+        'USER': 'cucba',
+        'PASSWORD': 'CUCA4DMinWeuser',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -58,10 +109,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cubac.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -82,13 +129,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
-
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Dhaka'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -101,11 +145,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-# 
-#
 
-print("base dir", BASE_DIR)
 PDF_STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
@@ -163,3 +205,8 @@ DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
 
 
 LOGIN_URL = reverse_lazy('login')
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
