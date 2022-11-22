@@ -5,10 +5,10 @@ import os
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.cucba.online', '146.190.108.25']
 BASE_DIR = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))).parent
 
-print("base dir prod", BASE_DIR)
+# print("base dir prod", BASE_DIR)
 # ALLOWED_HOSTS = ['www.cubac.online']
 
 
@@ -47,10 +47,15 @@ SESSION_COOKIE_SECURE = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': "",
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'cucba',
+        'USER': 'cucba',
+        'PASSWORD': 'CUCA4DMinWeuser',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
+
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
