@@ -17,12 +17,12 @@ class EducationalBackground(models.Model):
 
 class WorkExperience(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.CharField(max_length=20, null=False, blank=False)
-    organization = models.CharField(max_length=50, null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="work_experience")
+    post = models.CharField(max_length=300, null=False, blank=False)
+    organization = models.CharField(max_length=100, null=False, blank=False)
     major_responsibilities = models.TextField(null=True, blank=True )
-    from_date = models.DateField(null=False, blank=False)
-    to_date = models.DateField(null=True, blank=True)
+    from_date = models.CharField(max_length=30, null=False, blank=False)
+    to_date = models.CharField(max_length=30, null=True, blank=True)
     is_current = models.BooleanField()
 
 class AchievementMembership(models.Model):
@@ -32,10 +32,10 @@ class AchievementMembership(models.Model):
         ('Award', 'Award')
         )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="achievement_membership")
     achievement_type = models.CharField(max_length=20, choices=TYPE_CHOICE, null=False, blank=False)
     organization = models.CharField(max_length=50, null=False, blank=False)
-    year = models.DateField(blank=False, null=False)
+    year = models.CharField(max_length=20, blank=False, null=False)
 
 class TestScore(models.Model):
     EXAM_CHOICE= (
@@ -45,7 +45,7 @@ class TestScore(models.Model):
         ("IELTS", "IELTS")
         )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="test_score")
     test = models.CharField(max_length=10, choices=EXAM_CHOICE,  null=False, blank=False)
     score = models.CharField(max_length=20, null=False, blank=False)
     test_date = models.DateField(null=False, blank=False)

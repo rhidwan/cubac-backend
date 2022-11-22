@@ -41,6 +41,7 @@ urlpatterns = [
     path('make_staff_account/', user_view.make_staff_account, name="make_staff_account"),
     # path('project/create_account/', user_view.create_account, name="create_account"),
     path('', include('home.urls')),
+     path('__debug__/', include('debug_toolbar.urls')),
 
     path('call/', include('call_applications.urls')),
     path('profile/', include('profiles.urls')),

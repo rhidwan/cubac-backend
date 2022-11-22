@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'crispy_forms',
-
+    'debug_toolbar',
     'user',
     'functions',
     'home',
@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'cubac.urls'
@@ -122,6 +123,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
 
 LANGUAGE_CODE = 'en-us'
 

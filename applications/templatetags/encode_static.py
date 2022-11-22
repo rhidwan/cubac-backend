@@ -38,6 +38,9 @@ def get_object_count(*args):
     value = args[2]
     try:
         if value:
+            if value == "True": value = True
+            elif value == "False" : value = False
+            
             return len([x for x in objects if  getattr(x, attribute)  == value])
         else:
             return len([x for x in objects if getattr(x, attribute)])

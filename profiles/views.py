@@ -24,7 +24,6 @@ from django.shortcuts import get_object_or_404
 @permission_classes([IsAuthenticated])
 def profile(request):
     ProfileData = namedtuple('ProfileData', ('basic_info', 'test_scores', 'achievements', 'work_experiences', 'educational_backgrounds', 'user'))
-
     profile = ProfileData(
         basic_info=BasicInfo.objects.filter(user=request.user),
         test_scores=TestScore.objects.filter(user=request.user),
@@ -256,7 +255,6 @@ def edit_achievement_membership_detail(request, pk):
             print(e)
             messages.error(request, "Failed To Update Achievement Entry")
             return JsonResponse({"status":"error", "msg": "Failed To delete"}, status=200)
-
 
 
 @login_required()

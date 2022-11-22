@@ -4,15 +4,6 @@ from django.contrib.auth.models import (
 )
 
 
-'''
-Name	text(30)	  
-Designation	text(30)	  
-Department	text(30)	  
-mobile_no	text(30)	  
-username	text(30)	  
-# Role	bool(30)	  
-Type	bool(30)
-'''
 # class UserManager(BaseUserManager):
 #     def create_user(self, mobile_no, name=None, designation=None, department=None, user_type=None, password=None):
 #         """
@@ -61,6 +52,7 @@ from .managers import UserManager
 
 
 class User(AbstractUser):
+    id = models.AutoField(primary_key=True)
     GENDER_CHOICES = [(0, 'Male'), (1, 'Female'), (2, 'Other')]
 
     username = None

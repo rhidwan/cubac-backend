@@ -1,18 +1,19 @@
 
-.menu .app-brand.demo {
+.menu .app-brand {
   height: 64px;
   margin-top: 12px;
 }
 
-.app-brand-logo.demo svg {
+.app-brand-logo img {
   width: 22px;
   height: 38px;
 }
 
-.app-brand-text.demo {
-  font-size: 1.75rem;
+.app-brand-text {
+  font-size: 1.50 rem;
+  font-weight: 800;
   letter-spacing: -0.5px;
-  text-transform: lowercase;
+  text-transform: uppercase;
 }
 
 .menu-inner {

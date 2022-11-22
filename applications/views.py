@@ -66,7 +66,7 @@ def applications(request):
             query &= Q(user=request.user)
         
         
-        application_list = Application.objects.filter(query)
+        application_list = Application.objects.filter(query).prefetch_related('transaction', 'seat', 'call_for_application', 'user')
 
         page = request.GET.get('page', 1)
         paginator = Paginator(application_list, 10)
@@ -100,6 +100,9 @@ def generate_admit_card(request, pk):
         application = get_object_or_404(Application, pk=pk)
     else:
         application =  get_object_or_404(Application, pk=pk, user=request.user)
+    
+    if not application.seat:
+        return HttpResponse("Admit Card not ready yet")
 
     if request.method == "GET":
 
@@ -149,9 +152,7 @@ def generate_application_form(request, pk):
         application = get_object_or_404(Application, pk=pk)
     else:
         application =  get_object_or_404(Application, pk=pk, user=request.user)
-    if not application.seat:
-        return HttpResponse("Admit Card not ready yet")
-
+   
     if request.method == "GET":
 
          # template = get_template('pdf/callback_report.html')
@@ -191,6 +192,7 @@ def generate_bulk_application_form(request, pk):
     response['Content-Disposition'] = 'attachment; filename="application_form_{}.zip"'.format(application.call_for_application.title)
 
     return response
+
 @login_required()
 def application(request, pk):
     call_for_application = get_object_or_404(CallForApplication, pk=pk)
@@ -306,7 +308,7 @@ def list_transaction(request):
         elif date=="last30":
             query &= Q(transaction_time__gte=datetime.now()-timedelta(days=30))
     
-    transaction_list = transactions_list.filter(query)
+    transaction_list = transactions_list.filter(query).prefetch_related('application_set')
 
     page = request.GET.get('page', 1)
     paginator = Paginator(transaction_list, 10)
@@ -553,12 +555,12 @@ def seat_plan(request):
                 if season:
                     query &= Q(call_for_application=season)
                     
-                applications = Application.objects.filter(query)
+                applications = Application.objects.filter(query).prefetch_related('seat')
                 seasons = season
                 return render(request, 'seat_plan_detail.html', {"applications": applications, "season": season })
 
             else:
-                seasons = CallForApplication.objects.filter(start_date__lte=datetime.today(), end_date__gt=datetime.today())
+                seasons = CallForApplication.objects.filter(start_date__lte=datetime.today(), end_date__gt=datetime.today()).prefetch_related('application_set')
                 applications = []
 
                 return render(request, 'seat_plan.html', {"applications": applications, "seasons": seasons })
