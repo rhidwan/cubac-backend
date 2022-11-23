@@ -9,6 +9,7 @@ class Seat(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
     room = models.CharField(max_length=100, blank=False, null=False)
     capacity = models.IntegerField(default=0, blank=False, null=False)
+    call_for_application = models.ForeignKey(CallForApplication, on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class Transaction(models.Model):

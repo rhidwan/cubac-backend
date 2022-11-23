@@ -528,9 +528,11 @@ def generate_seat_plan(request, pk):
         for av in rooms_and_capacities:
             room = av[0]
             capacity = int(av[1])
-            #@todo change is_approved to True 
+            seat = Seat.objects.create(room=room, capacity=capacity, call_for_application=call_for_application)
+            seat.save()
+            #@todo need to update 
             applicants = Application.objects.filter(seat__isnull =True, is_approved=False , call_for_application=call_for_application) [:capacity] 
-            Application.objects.filter(id__in=applicants).update(seat=room)
+            Application.objects.filter(id__in=applicants).update(seat=seat)
 
         return JsonResponse({"message": "Seat plan generated successfully"})
 
@@ -556,14 +558,26 @@ def seat_plan(request):
                     query &= Q(call_for_application=season)
                     
                 applications = Application.objects.filter(query).prefetch_related('seat')
-                seasons = season
                 return render(request, 'seat_plan_detail.html', {"applications": applications, "season": season })
 
             else:
                 seasons = CallForApplication.objects.filter(start_date__lte=datetime.today(), end_date__gt=datetime.today()).prefetch_related('application_set')
+                data = {}
+                for season in seasons:
+                    # applications = season.application_set.all().values_list('id')
+
+                    # seats  = Seat.objects.filter(application_set__is_null=False, application_set__in=application())
+                    seats = Seat.objects.filter(call_for_application=season).prefetch_related('application_set')
+                    data[season] = {
+                        "seats": {x.room: len(x.application_set.all()) for x in seats},
+                        "num_applicants" : len(season.application_set.all()),
+                        "unallocated" : len(season.application_set.all().filter(seat__isnull=True))
+                    }
+                    
+                print(data)
                 applications = []
 
-                return render(request, 'seat_plan.html', {"applications": applications, "seasons": seasons })
+                return render(request, 'seat_plan.html', {"applications": applications, "seasons": data })
         
         
 @login_required()
@@ -589,11 +603,15 @@ def seat_plan_detail(request, pk):
             for av in rooms_and_capacities:
                 room = av[0]
                 capacity = int(av[1])
-                seat = Seat.objects.create(room=room, capacity=int(av[1]))
+                
                 if capacity != 0:
+                    seat = Seat.objects.create(room=room, capacity=int(av[1]), call_for_application=season)
+                    seat.save()
+                    print("saved", seat)
                     #@todo change is_approved to True 
-                    applicants = Application.objects.filter(seat__isnull =True, is_approved=False , call_for_application=season) [:capacity] 
-                    Application.objects.filter(id__in=applicants).update(seat=seat)
+                    applicants = Application.objects.filter(seat__isnull =True, is_approved=True , call_for_application=season) [:capacity] 
+                    a = Application.objects.filter(id__in=applicants).update(seat=seat)
+                    print("updated", a)
 
             messages.success(request, "Successfully Allocated Seat")
             return JsonResponse({"status": "success", "msg": "done"}, status=201)

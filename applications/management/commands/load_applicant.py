@@ -12,6 +12,7 @@ from profiles.models import AchievementMembership, BasicInfo, EducationalBackgro
 from profiles.serializers import ProfileSerializer
 from user.models import User
 import random
+import dateutil.parser 
 
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
@@ -30,20 +31,27 @@ random_words = ["dingmaul","daymares","blipping","uncasked","pickpole",
         ]
 
 static_proxies = [
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.222.247:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.221.143:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.223.139:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.220.13:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.221.152:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.220.94:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.221.181:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.221.123:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.221.111:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.221.229:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.221.251:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.223.115:12323"},
-    {"https": "http://14af181aa6742:45ff95bb78@171.22.223.113:12323"},
-
+    {"https": "http://vqdytdhy:tctgyaae8lc2@45.87.243.225:6227"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@95.164.135.47:6580"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@192.186.151.141:8642"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@69.58.9.16:7086"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@170.244.92.70:8630"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@45.86.66.217:6470"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@171.22.133.7:7266"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@144.168.145.8:6056"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@185.101.169.253:6797"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@138.128.69.4:8073"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@94.131.81.81:6221"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@104.144.3.98:6177"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@23.236.183.33:8604"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@144.168.140.29:8100"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@23.236.183.152:8723"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@209.127.183.32:8130"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@107.152.190.209:7230"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@104.223.223.77:6662"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@84.21.189.226:5873"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@104.144.147.150:8184"},
+    {"https": "http://vqdytdhy:tctgyaae8lc2@107.152.170.63:9114"},
 ]
 
 
@@ -85,8 +93,8 @@ class Command(BaseCommand):
             print("Something went wrong")
             return
 
-        # sheet_link = input("Please insert the google sheet file name: ")
-        sheet_link = 'https://docs.google.com/spreadsheets/d/1GaH7uxtoa6dg4-M7gl-wDqWhGsozCuKfG680NR7ZALs/edit?usp=sharing'
+        sheet_link = input("Please insert the google sheet file url: ")
+        # sheet_link = 'https://docs.google.com/spreadsheets/d/1GaH7uxtoa6dg4-M7gl-wDqWhGsozCuKfG680NR7ZALs/edit?usp=sharing'
         scope = ['https://spreadsheets.google.com/feeds',
             'https://www.googleapis.com/auth/drive']
         creds = ServiceAccountCredentials.from_json_keyfile_name(client_secret_file, scope)
@@ -210,7 +218,7 @@ class Command(BaseCommand):
                 continue
             i = i + 1
 
-        import dateutil.parser                                    
+                                           
         for row in list_of_lists[1:]:
             # print(row.index(matched_index["full_name"]))
             user["email"] = row[matched_index["email"]]
@@ -335,6 +343,11 @@ class Command(BaseCommand):
                     nid_passport_no = basic_info["nid_passport_no"], is_employed = basic_info["is_employed"], 
                     permanent_address = basic_info["permanent_address"], present_address = basic_info["present_address"], 
                     phone_number = basic_info["phone_number"], work_phone = basic_info["work_phone"] )
+            else:
+                basic_info_new = basic_info_new[0]
+                print("basic info exist")  
+
+            if not basic_info_new.photo: 
                 link = direct_google_drive_link_generator( basic_info["photo"])
                 req_headers = {
                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) {}/105.0.0.0 Safari/537.36'.format(random.choice(random_words))
@@ -358,9 +371,7 @@ class Command(BaseCommand):
 
                 basic_info_new.save()
                 print("basic info created successfully ")
-            else:
-                basic_info_new = basic_info_new[0]
-                print("basic info exist")
+        
 
             if educations:
                 for education in educations:

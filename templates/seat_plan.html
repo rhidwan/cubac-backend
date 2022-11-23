@@ -33,9 +33,10 @@ Seat Plan | CUBAC
     
     <div class="row">
         {% if seasons %}
-            {% for season in seasons %}
+
+            {% for k, v in seasons.items %}
             <div class="col-md-6 col-xs-12">
-                {% include 'card/seat_plan_season_card.html' with season=season %}
+                {% include 'card/seat_plan_season_card.html' with season=k seats=v.seats num_applicants=v.num_applicants unallocated=v.unallocated  %}
             </div>
             {% endfor %}
         {% endif %}
@@ -55,9 +56,9 @@ Seat Plan | CUBAC
     </div>
     </div>
     </div>
-    {% else %}
-    {% include 'card/nodata.html' %}
-    {% endif %}
+{% else %}
+{% include 'card/nodata.html' %}
+{% endif %}
        
   
     

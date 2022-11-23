@@ -53,13 +53,13 @@ Seat Plan For {{season.title}} CUBAC
                       <div class="dropdown me-2">
                         {% regroup applications by seat as vanues %}
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Venue: {% if filter.venue %}{% for group in vanues %} {% if group.grouper.id|stringformat:"s" == filter.venue %}{{group.grouper.title}} {%endif%}  {% endfor %}{% endif %}
+                          Venue: {% if filter.venue %}{% for group in vanues %} {% if group.grouper.id|stringformat:"s" == filter.venue %}{{group.grouper.room}} {%endif%}  {% endfor %}{% endif %}
                         </button>
                         <ul class="dropdown-menu  dropdown-menu-end">
                           <li><a class="dropdown-item {% if not filter.venue %}active{% endif %} " href="?{% param_replace venue=''  %}">All</a></li>
                           
                           {% for group in vanues %}
-                              <li><a class="dropdown-item {% if group.grouper.id|stringformat:'s' == filter.venue %}active{% endif %}" href="?{% param_replace venue=group.grouper.id  %}">{{ group.grouper.title }}</a></li>
+                              <li><a class="dropdown-item {% if group.grouper.id|stringformat:'s' == filter.venue %}active{% endif %}" href="?{% param_replace venue=group.grouper.id  %}">{{ group.grouper.room }}</a></li>
                           {% endfor %}
                         </ul>
                     </div>

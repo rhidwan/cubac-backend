@@ -18,29 +18,32 @@
             <div class="flex-grow-1">
               
               <h5 class="fw-semibold d-block">{{season.title}}</h5>
-              {% regroup season.application_set.all by seat as seat_group %}
-              
+
               <div class="row">
                 <div class="col-6 text-end">Number of Applicants</div>
                 <div class="col-1">:</div>
-                <div class="col-5 text-start">{{season.application_set.count}}</div>
+                <div class="col-5 text-start">{{num_applicants}}</div>
               </div>
               <div class="mt-1"><span class="fw-semibold"></span> </div>
-              {% if seat_group %}
-              {% for group in seat_group %}
-              <div class="row">
-                <div class="col-6 text-end">{{group.grouper.room|default:"Not allocated"}}</div>
-                <div class="col-1">:</div>
-                <div class="col-5 text-start">{{group.list|length}}</div>
-              </div>
-              {% endfor %}
-              {% else %}
+    
+
+                {% for room, num in seats.items %}
+                <div class="row">
+                  <div class="col-6 text-end">{{room}}</div>
+                  <div class="col-1">:</div>
+                  <div class="col-5 text-start">{{num}}</div>
+                </div>
+                {% endfor %}
+
+                
+              {% if unallocated %}
               <div class="row">
                 <div class="col-6 text-end"> Not allocated</div>
                 <div class="col-1">:</div>
-                <div class="col-5 text-start"> {{season.application_set.count}}</div>
+                <div class="col-5 text-start"> {{unallocated}}</div>
               </div>
               {% endif %}
+       
             </div>
 
             <div class="mt-2">

@@ -16,7 +16,7 @@
             <div class="flex-grow-1">
                 <h5 class="fw-semibold d-block">{{application.call_for_application.title}}</h5>
                 <p class="d-block">Roll No: {{application.roll_no}}</p>
-                <p class=" d-block">Venue: {{application.seat|default:""}}</p>
+                <p class=" d-block">Venue: {{application.seat.room|default:""}}</p>
             </div>
             <div class="mt-2">
                 <button class="btn btn-outline-primary"> View </button>

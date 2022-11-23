@@ -2,7 +2,7 @@
 <div class="card  border border-light mb-2">
   <div class="card-header bg-default">
     <div class="row">
-      <div class="{% if disable_action != True %} col-11 {% else %} col-12{% endif %}">
+      <div class="{% if disable_action != True %} col-10 {% else %} col-12{% endif %}">
                
         <div class="d-flex align-items-center">
             <div class="flex-shrink-0 me-3">
@@ -22,7 +22,7 @@
         </div>
       </div>
       {% if disable_action != True %}
-      <div class="col-1 d-flex justify-content-end align-items-center gap-1">
+      <div class="col-2 d-flex justify-content-end align-items-center gap-1">
         <div class="dropdown">
           <button class="btn p-0" type="button" id="testscore{{forloop.counter}}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="bx bx-dots-vertical-rounded"></i>

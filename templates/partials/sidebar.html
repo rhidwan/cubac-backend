@@ -108,37 +108,7 @@
             <span class="dropdown-toggle hide-arrow me-2" data-bs-toggle="dropdown">
               <i class="menu-icon tf-icons bx bx-dots-vertical"></i>
             </span>
-            <ul class="dropdown-menu dropdown-menu-start">
-              {% if request.user.is_staff %}
-              <li>
-                <a class="dropdown-item" href="{% url 'make_staff_account' %}" >
-                  <i class="bx bx-user me-2"></i>
-                  <span class="align-middle">Create Staff Account</span>
-                </a>
-              </li>
-              {% endif %}
-              <li>
-                <a class="dropdown-item" href="{% url 'update_user_info' %}" >
-                  <i class="bx bx-user me-2"></i>
-                  <span class="align-middle">Change Account Info</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'change_password' %}">
-                  <i class="bx bx-key me-2"></i>
-                  <span class="align-middle">Change Password</span>
-                </a>
-              </li>
-              <li>
-                <div class="dropdown-divider"></div>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'logout' %}">
-                  <i class="bx bx-power-off me-2"></i>
-                  <span class="align-middle">Log Out</span>
-                </a>
-              </li>
-            </ul>
+           {% include 'partials/user_dropdown.html' with  c="dropdown-menu-start" %}
           </div>
   
         </div>

@@ -54,7 +54,7 @@ Dashboard | CUBAC
     {% else %}
     {% include 'card/nodata.html' %}
     {% endif %}
-  {% else%}
+  {% else %}
       {% if applications %}
   <div class="col-sm-4 col-xs-6 mb-4">
       {% url 'application_detail' applications.0.id as action_url %}
@@ -80,6 +80,8 @@ Dashboard | CUBAC
           {% include 'modal/form_modals.html' with modal_id="modaltx" title="New Transaction Entry" form="transaction" action=action_url  %}
       {% endif %}
     </div>
+      {% else %}
+      {% include 'card/nodata.html' %}
       {% endif %}
   {% endif %}
 
