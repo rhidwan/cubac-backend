@@ -372,26 +372,28 @@ class Command(BaseCommand):
                 basic_info_new.save()
                 print("basic info created successfully ")
         
-
             if educations:
                 for education in educations:
+                    print(education)
                     ed =  EducationalBackground.objects.get_or_create(user=user_new, **education)
                     # ed.save()
-            
+
             if work_experiences:
                 for work in work_experiences:
+                    print(work)
                     wx = WorkExperience.objects.get_or_create(user=user_new, **work)
                     # wx.save()
             if achievement_memberships:
                 for ach in achievement_memberships:
+                    print(ach)
                     am = AchievementMembership.objects.get_or_create(user=user_new, **ach)
                     # am.save()
 
             if test_scores:
                 for test in test_scores:
+                    print(test)
                     ts = TestScore.objects.get_or_create(user=user_new, **test)
-                    # ts.save()
-
+                    
             transaction = Transaction.objects.create(
                                 payment_type="Manual", transaction_method="Bkash", amount='500',
                                  transaction_from=row[matched_index["transaction_from"]], transaction_id=row[matched_index["transaction_id"]],
