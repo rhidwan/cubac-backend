@@ -18,7 +18,7 @@ class EducationalBackground(models.Model):
 class WorkExperience(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="work_experience")
-    post = models.CharField(max_length=300, null=False, blank=False)
+    post = models.TextField(null=False, blank=False)
     organization = models.CharField(max_length=100, null=False, blank=False)
     major_responsibilities = models.TextField(null=True, blank=True )
     from_date = models.CharField(max_length=100, null=False, blank=False)
