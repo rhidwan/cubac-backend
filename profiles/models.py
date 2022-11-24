@@ -11,7 +11,7 @@ class EducationalBackground(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="educational_background", related_query_name="educational_background")
     degree = models.CharField(max_length=100, blank=False, null=False)
     institute = models.CharField(max_length=100, blank=False, null=False)
-    passing_year = models.CharField(max_length=10, blank=True, null=True)
+    passing_year = models.CharField(max_length=50, blank=True, null=True)
     area_major = models.CharField(max_length=100, blank=False, null=False)
     division_class_cgpa = models.CharField(max_length=100, blank=True, null=True)
 
@@ -35,7 +35,7 @@ class AchievementMembership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="achievement_membership")
     achievement_type = models.CharField(max_length=20, choices=TYPE_CHOICE, null=False, blank=False)
     organization = models.CharField(max_length=250, null=False, blank=False)
-    year = models.CharField(max_length=20, blank=False, null=False)
+    year = models.CharField(max_length=50, blank=False, null=False)
 
 class TestScore(models.Model):
     EXAM_CHOICE= (
@@ -55,12 +55,12 @@ class BasicInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="basic_info")
     father_name = models.CharField(max_length=250, null=False, blank=False)
     mother_name = models.CharField(max_length=250, null=False, blank=False)
-    nationality = models.CharField(max_length=30, null=False, blank=False)
+    nationality = models.CharField(max_length=100, null=False, blank=False)
     nid_passport_no = models.CharField(max_length=250, null=False, blank=False)
     is_employed = models.BooleanField(blank=False, null=False)
     permanent_address = models.TextField()
     present_address = models.TextField()
-    phone_number = models.CharField(max_length=13, null=False, blank=False)
-    work_phone = models.CharField(max_length=13, null=True, blank=True)
+    phone_number = models.CharField(max_length=50, null=False, blank=False)
+    work_phone = models.CharField(max_length=50, null=True, blank=True)
     photo = ResizedImageField(size=[300,300], upload_to="pictures/")
 

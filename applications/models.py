@@ -21,10 +21,10 @@ class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
     payment_type = models.CharField(max_length=10, choices=TYPE_CHOICE,  null=False, blank=False)
     transaction_method = models.CharField(max_length=100, blank=False, null=False)
-    amount = models.CharField(max_length=20, blank=False, null=False)
+    amount = models.CharField(max_length=100, blank=False, null=False)
     transaction_from = models.CharField(max_length=100)
     transaction_id = models.CharField(max_length=100, blank=False, null=False)
-    transaction_time = models.DateField(max_length=30, blank=False, null=False)
+    transaction_time = models.DateField(max_length=100, blank=False, null=False)
     is_approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)        
 
