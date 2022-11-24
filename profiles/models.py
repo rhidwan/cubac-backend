@@ -47,7 +47,7 @@ class TestScore(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="test_score")
     test = models.CharField(max_length=10, choices=EXAM_CHOICE,  null=False, blank=False)
-    score = models.CharField(max_length=20, null=False, blank=False)
+    score = models.CharField(max_length=250, null=False, blank=False)
     test_date = models.DateField(null=False, blank=False)
     
 class BasicInfo(models.Model):
