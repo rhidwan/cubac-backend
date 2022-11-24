@@ -157,7 +157,7 @@ class Command(BaseCommand):
                 matched_index["transaction_id"] = i
             elif "transaction date" in title:
                 matched_index["transaction_time"] = i
-            elif "bkash" in title:
+            elif "payment information ( phone number)" in title:
                 matched_index["transaction_from"] = i
 
             elif "academic" in title:
