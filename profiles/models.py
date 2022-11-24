@@ -9,11 +9,11 @@ from user.models import User
 class EducationalBackground(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="educational_background", related_query_name="educational_background")
-    degree = models.CharField(max_length=50, blank=False, null=False)
-    institute = models.CharField(max_length=50, blank=False, null=False)
-    passing_year = models.CharField(max_length=4, blank=True, null=True)
-    area_major = models.CharField(max_length=50, blank=False, null=False)
-    division_class_cgpa = models.CharField(max_length=10, blank=True, null=True)
+    degree = models.CharField(max_length=100, blank=False, null=False)
+    institute = models.CharField(max_length=100, blank=False, null=False)
+    passing_year = models.CharField(max_length=10, blank=True, null=True)
+    area_major = models.CharField(max_length=100, blank=False, null=False)
+    division_class_cgpa = models.CharField(max_length=30, blank=True, null=True)
 
 class WorkExperience(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
