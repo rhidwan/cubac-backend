@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $(".ajax-delete").click( function (e) {
       e.preventDefault();
-        
+      let csrf_token =  document.querySelector('[name=csrfmiddlewaretoken]').value;
       let link_url = $(this).attr('href');
     //   let help_elm = $(this).find(".help-text")
     //   let btn_html = btn.html();
@@ -25,6 +25,9 @@ $(document).ready(function () {
                         $.ajax({
                             type: "DELETE",
                             url: link_url,
+                            beforeSend: function(xhr) {
+                              xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                            },
                             success: function (data) {
                                 console.log(data);
                                 var res = JSON.parse(JSON.stringify(data));
