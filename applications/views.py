@@ -22,11 +22,10 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from sslcommerz_lib import SSLCOMMERZ 
 from django.contrib import messages
-from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from .utils import render_to_pdf, generate_zip, render_pdf
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import time
+
 # Create your views here.
 #@todo permissions need to be revised
 
@@ -127,23 +126,45 @@ def generate_admit_card(request, pk):
 
 @login_required()
 def generate_bulk_admit_card(request, pk):
-    applications = Application.objects.filter(call_for_application=pk)
+    applications = Application.objects.filter(call_for_application=pk).prefetch_related( 'transaction', 'call_for_application', 'seat' )
+    
+    filetype = request.GET.get('format', 'pdf')
+    
+    if filetype == "zip":
+        files = []
+        for application in applications:
+            context = {
+                    "application": application,
+            }
+            pdf = render_pdf(request, 'pdf/admit_card.html' , context)
+            files.append((application.roll_no + ".pdf", pdf))
+        
+        full_zip_in_memory = generate_zip(files)
 
-    files = []
+        response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename="admit_cards_{}.zip"'.format(application.call_for_application.title)
 
-    for application in applications:
+        return response
+
+    elif filetype == "pdf":
+
+         # template = get_template('pdf/callback_report.html')
         context = {
-                "application": application,
+                "applications": applications,
         }
-        pdf = render_pdf(request, 'pdf/admit_card.html' , context)
-        files.append((application.roll_no + ".pdf", pdf))
 
-    full_zip_in_memory = generate_zip(files)
-
-    response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="admit_card_{}.zip"'.format(application.call_for_application.title)
-
-    return response
+        # html = template.render(context)
+        pdf = render_to_pdf(request, 'pdf/admit_card_bulk.html' , context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "admit_card_%s.pdf" %(applications[0].call_for_application.title)
+            # content = "inline; filename='%s'" %(filename)
+            # download = request.GET.get("download")
+            # if download:
+            content = "attachment; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
 
 
 @login_required()
@@ -173,25 +194,51 @@ def generate_application_form(request, pk):
             return response
         return HttpResponse("Not found")
 
+
 @login_required()
 def generate_bulk_application_form(request, pk):
-    applications = Application.objects.filter(call_for_application=pk)
+    applications = Application.objects.filter(call_for_application=pk).prefetch_related( 'transaction', 'call_for_application', 'seat' )
+    
+    filetype = request.GET.get('format', 'pdf')
+    
+    if filetype == "zip":
+        files = []
 
-    files = []
+        for application in applications:
+            context = {
+                    "application": application,
+            }
+            pdf = render_pdf(request, 'pdf/application_form.html' , context)
+            files.append((application.roll_no + ".pdf", pdf))
 
-    for application in applications:
+        full_zip_in_memory = generate_zip(files)
+
+        response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename="application_form_{}.zip"'.format(application.call_for_application.title)
+
+        return response
+        
+
+    elif filetype == "pdf":
+
+         # template = get_template('pdf/callback_report.html')
         context = {
-                "application": application,
+                "applications": applications,
         }
-        pdf = render_pdf(request, 'pdf/application_form.html' , context)
-        files.append((application.roll_no + ".pdf", pdf))
 
-    full_zip_in_memory = generate_zip(files)
+        # html = template.render(context)
+        pdf = render_to_pdf(request, 'pdf/application_form_bulk.html' , context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "application_forms_%s.pdf" %(applications[0].call_for_application.title)
+            # content = "inline; filename='%s'" %(filename)
+            # download = request.GET.get("download")
+            # if download:
+            content = "attachment; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
 
-    response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="application_form_{}.zip"'.format(application.call_for_application.title)
-
-    return response
 
 @login_required()
 def application(request, pk):
@@ -561,7 +608,7 @@ def seat_plan(request):
                 return render(request, 'seat_plan_detail.html', {"applications": applications, "season": season })
 
             else:
-                seasons = CallForApplication.objects.filter(start_date__lte=datetime.today(), end_date__gt=datetime.today()).prefetch_related('application_set')
+                seasons = CallForApplication.objects.filter(start_date__lte=datetime.today(), end_date__gt=datetime.today()-timedelta(days=30)).prefetch_related('application_set')
                 data = {}
                 for season in seasons:
                     # applications = season.application_set.all().values_list('id')
@@ -583,11 +630,9 @@ def seat_plan(request):
 @login_required()
 def seat_plan_detail(request, pk):
     if request.user.is_staff:
-        season = get_object_or_404(CallForApplication, id=pk)
 
         if request.method == "POST":
-          
-        
+            season = get_object_or_404(CallForApplication, id=pk)
             data = request.POST
             rooms_and_capacities = []
             for key, value in data.items():
@@ -614,6 +659,12 @@ def seat_plan_detail(request, pk):
                     print("updated", a)
 
             messages.success(request, "Successfully Allocated Seat")
+            return JsonResponse({"status": "success", "msg": "done"}, status=201)
+        if request.method == "DELETE":
+            seat = get_object_or_404(Seat, id=pk)
+            # seat.application_set.all().update(seat=None)
+            seat.delete()
+            messages.success(request, "Successfully Deleted Seat")
             return JsonResponse({"status": "success", "msg": "done"}, status=201)
 
     messages.success(request, "Failed to generate seat plan")

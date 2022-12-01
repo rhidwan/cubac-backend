@@ -3,9 +3,10 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from django.conf import settings
 import os
-from xhtml2pdf import pisa
+# from xhtml2pdf import pisa
 from weasyprint import HTML, CSS
 import zipfile
+# from PyPDF2 import PdfFileMerger
 
 def link_callback(uri, rel):
     # use short variable names
@@ -59,3 +60,13 @@ def generate_zip(files):
             zf.writestr(f[0], f[1])
 
     return mem_zip.getvalue()
+
+# def merge_pdf(files):
+#     mem_pdf = BytesIO()
+#     merger = PdfFileMerger()
+#     pdf_files = [x for x in files if x.endswith(".pdf")]
+#     [merger.append(pdf) for pdf in pdf_files]
+    
+#     merger.write(mem_pdf)
+    
+#     return mem_pdf.getvalue()

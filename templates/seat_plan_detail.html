@@ -68,9 +68,15 @@ Seat Plan For {{season.title}} CUBAC
                  
                   </div>
                   {% if applications %}
-                  <div class="row"> 
+                  <div class="row" data-masonry='{"percentPosition": true }'> 
 
-                    {% include 'tables/seat_plan_table.html' with applications=applications split_search=True %}
+                    <!-- {% include 'tables/seat_plan_table.html' with applications=applications split_search=True %} -->
+                    {% for group in vanues %}
+                    <div class="col-md-6 col-sm-12">
+                      {% include 'card/seat_plan_room_card.html' with seat=group.grouper applications=group.list %}
+                    </div>
+
+                    {% endfor %}
                   </div>
                   {% include 'partials/pagination.html' with pagination=applications %}
 
@@ -85,6 +91,7 @@ Seat Plan For {{season.title}} CUBAC
         
       </div>
 </div>
+<script src="{% static 'vendor/masonry/masonry.pkgd.min.js' %}"></script>
 
 
 

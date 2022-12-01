@@ -25,7 +25,7 @@
 
 
 <body class="bg-white text-dark">
-    
+    {% for application in applications %}
 <div class="container">
         
         <div class="row d-flex align-items-center">
@@ -149,10 +149,10 @@
     <table class="table table-bordered">
     <thead>
     <tr style="text-align:center;font-weight:bold;">
-      <td scope="col" class="col-1">Position</td>
-      <td scope="col" class="col-1">Organization</td>
-      <td scope="col" class="col-9">Major Responsibilities</td>
-      <td scope="col" class="col-1">Duration (From - To)</td>
+      <td scope="col" class="col-2">Position</td>
+      <td scope="col" class="col-4">Organization</td>
+      <td scope="col" class="col-4">Major Responsibilities</td>
+      <td scope="col" class="col-2 ">Duration (From - To)</td>
     
     </tr>
     </thead>
@@ -263,7 +263,10 @@
     
     
     </div>
-    
+    {% if forloop.counter != forloop.last %}
+    <p style="page-break-before: always" ></p>
+    {% endif %}
+    {% endfor %}
 </body>
 
 </html>
