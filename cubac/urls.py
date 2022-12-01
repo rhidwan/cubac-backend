@@ -21,6 +21,7 @@ import user.views as user_view
 from django.conf import settings
 from django.conf.urls.static import static
 from allauth.account.views import confirm_email
+from django.contrib.auth import urls as auth_urls
 
 def custom_page_not_found(request):
     return django.views.defaults.page_not_found(request, None)
@@ -32,7 +33,7 @@ urlpatterns = [
     path('auth/registration/', include('rest_auth.registration.urls')),
     path('account/', include('allauth.urls')),
     path('account/registration/verify-email/<str:key>/', confirm_email, name='account_confirm_email'),
-
+    path('authentication/', include('django.contrib.auth.urls')),
     path('login/', user_view.user_login, name="login"),
     path('register', user_view.user_registration, name="register"),
     path('logout/', user_view.user_logout, name="logout"),
@@ -47,6 +48,10 @@ urlpatterns = [
     path('profile/', include('profiles.urls')),
     path('application/', include('applications.urls')),
 
+    # path('password_reset/', auth_views.password_reset, name='password_reset'),
+    # path('password_reset/done/', auth_views.password_reset_done, name='password_reset_done'),
+    # path('reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',auth_views.password_reset_confirm, name='password_reset_confirm'),
+    # path('reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     # path('task/', include('todo.urls')),
     # path('project/', include('project.urls')),
     # path('daily_report/', include('daily_report.urls')),
