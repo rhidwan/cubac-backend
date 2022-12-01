@@ -59,10 +59,10 @@ Season | CUBAC
       </div>
 
       <div class="col-sm-4 col-xs-6 mb-4">
-        {% url 'applications' as action_url %}
+        {% url 'seat_plan' as action_url %}
 
-        {% concat_all action_url '?season=' open_application.id '&status=pending' as suffix %}
-        {% include 'card/micro_card.html' with title="Pending Approval" info=pending_approval btn_text="View All" action_url=suffix  %}
+        {% concat_all action_url '?season=' open_application.id as suffix %}
+        {% include 'card/micro_card.html' with title="Seat Allocated" info=seat_allocated btn_text="View All" action_url=suffix  %}
        
       </div>
 

@@ -77,13 +77,13 @@ def open_application_detail(request, slug):
                 applications = Application.objects.filter(call_for_application=open_application)
                 # number_of_applicants =  1 Pending Approval: 1 Payment Done: 1
                 num_applications = len(applications)
-                pending_approval = len([x for x in applications if not x.is_approved])
+                seat_allocated = len([x for x in applications if x.seat])
                 payment_done = len([x for x in applications if x.is_payment_done])
-                print(num_applications, pending_approval)
+
                 return render(request, 'season.html', {
                     "open_application": open_application,
                     "num_applicants": num_applications,
-                    "pending_approval": pending_approval,
+                    "seat_allocated": seat_allocated,
                     "payment_done":payment_done
                     
                     })
