@@ -7,6 +7,7 @@ from collections import namedtuple
 import time
 import requests
 from applications.models import Application, Transaction
+from applications.utils import generate_roll_no
 from call_applications.models import CallForApplication
 from profiles.models import AchievementMembership, BasicInfo, EducationalBackground, TestScore, WorkExperience
 from profiles.serializers import ProfileSerializer
@@ -58,24 +59,6 @@ static_proxies = [
 def direct_google_drive_link_generator(link):
     d_id = link.split('id=')[-1]
     return "https://drive.google.com/uc?export=download&id={}".format(d_id)
-
-def generate_roll_no(call_application):
-    '''
-    Helper function to generate roll number
-    input: 
-        -  Call Application Object
-    output :
-        - Generated Roll Number 
-    '''
-    
-    applications = Application.objects.filter(call_for_application=call_application)
-
-    short_code = call_application.shortcode 
-    suffix = len(applications) + 1
-    roll_number = short_code + str(suffix).zfill(4)
-
-    return roll_number
-
 
 class Command(BaseCommand):
     help = 'Loads Applicants information from google sheet'

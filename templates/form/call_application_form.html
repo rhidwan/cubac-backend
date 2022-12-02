@@ -50,7 +50,7 @@
           </div>
 
           <div class="mb-3 col-md-6">
-            <label for="to_date" class="form-label">ShortCode</label>
+            <label for="shortcode" class="form-label">ShortCode</label>
             <input
               type="text"
               class="form-control"
@@ -58,6 +58,61 @@
               name="shortcode"
               value="{{call_application.shortcode}}"
               placeholder="prefix for Roll no"
+            />
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="chunk" class="form-label">Chunk</label>
+            <input
+              type="number"
+              class="form-control"
+              id="chunk"
+              name="chunk"
+              value="{{call_application.chunk}}"
+              placeholder="Chunk Roll Number"
+            />
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="skip_to" class="form-label">Skip To</label>
+            <input
+              type="number"
+              class="form-control"
+              id="skip_to"
+              name="skip_to"
+              value="{{call_application.skip_to}}"
+              placeholder="Skip To Number once chunk is complete"
+            />
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="exam_date" class="form-label">Exam Date</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exam_date"
+              name="exam_date"
+              value="{{call_application.exam_date|default:''}}"
+              placeholder="December 09 (Friday), 2022"
+            />
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="written_exam_time" class="form-label">Written</label>
+            <input
+              type="text"
+              class="form-control"
+              id="written_exam_time"
+              name="written_exam_time"
+              value="{{call_application.written_exam_time|default:''}}"
+              placeholder="3.30 pm to 4.30 pm"
+            />
+          </div>
+          <div class="mb-3 col-md-6">
+            <label for="viva_voce_time" class="form-label">Viva-voce</label>
+            <input
+              type="text"
+              class="form-control"
+              id="viva_voce_time"
+              name="viva_voce_time"
+              value="{{call_application.viva_voce_time|default:''}}"
+              placeholder="5.00 pm"
             />
           </div>
 

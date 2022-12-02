@@ -18,7 +18,7 @@
                 box-shadow:none!important;
                 font-size: small!important;
             }
-
+        }
     </style>
     <link rel="stylesheet" href="{% static 'vendor/css/core.css' %}" />
 </head>
@@ -48,7 +48,7 @@
             </div>
 
             <div class="row p-1">
-    <div style="text-align:center;margin-top:20px;border:2px solid black;">Admit Card</div>
+    <div style="text-align:center;margin-top:20px;border:2px solid black;">Admit Card for Written Test & Viva-voce</div>
             </div>
     
 
@@ -70,13 +70,12 @@
         <div class="row p-1">
             <div class="col-5"><strong>Date </strong></div>
             <div class="col-1">:</div>
-            <div class="col-6">June 10 (Friday), 2022</div>
+            <div class="col-6">{{application.call_for_application.exam_date}} </div>
         </div>
         <div class="row p-1">
             <div class="col-5"><strong>Time</strong> </div>
             <div class="col-1">:</div>
-            <div class="col-6">4 pm – 5 pm (Written Test) <br>5.30 pm
-                    (Viva-Voce)</div>
+            <div class="col-6">{{application.call_for_application.written_exam_time}} (Written Test) <br>{{application.call_for_application.viva_voce_time}} (Viva-Voce)</div>
         </div>
         
 

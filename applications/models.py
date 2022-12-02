@@ -43,5 +43,7 @@ class Application(models.Model):
     is_admit_ready = models.BooleanField(default=False)
     is_seatplan_ready = models.BooleanField(default=False)
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True, blank=True)
-    # class Meta:
-    #    unique_together= [['call_for_application', 'user']]
+    
+    class Meta:
+        unique_together= [['call_for_application', 'user']]
+        ordering = ('roll_no',)

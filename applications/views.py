@@ -23,28 +23,11 @@ from django.shortcuts import get_object_or_404, render
 from sslcommerz_lib import SSLCOMMERZ 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .utils import render_to_pdf, generate_zip, render_pdf
+from .utils import render_to_pdf, generate_zip, render_pdf, generate_roll_no
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 #@todo permissions need to be revised
-
-def generate_roll_no(call_application):
-    '''
-    Helper function to generate roll number
-    input: 
-        -  Call Application Object
-    output :
-        - Generated Roll Number 
-    '''
-    
-    applications = Application.objects.filter(call_for_application=call_application)
-
-    short_code = call_application.shortcode 
-    suffix = len(applications) + 1
-    roll_number = short_code + str(suffix).zfill(4)
-
-    return roll_number
 
 @login_required()
 def applications(request):

@@ -6,6 +6,7 @@ import os
 # from xhtml2pdf import pisa
 from weasyprint import HTML, CSS
 import zipfile
+from applications.models import Application
 # from PyPDF2 import PdfFileMerger
 
 def link_callback(uri, rel):
@@ -61,6 +62,42 @@ def generate_zip(files):
 
     return mem_zip.getvalue()
 
+
+def generate_roll_no(call_application, latest_roll = None):
+    '''
+    Helper function to generate roll number
+    input: 
+        -  Call Application Object
+    output :
+        - Generated Roll Number 
+    '''
+    if latest_roll:
+        last_roll = latest_roll
+
+    else:
+        latest_application = Application.objects.filter(call_for_application=call_application).order_by('roll_no').latest('roll_no')
+        if latest_application:
+            last_roll = latest_application.roll_no
+        else:
+            last_roll = '0'
+    
+    # print("last entry : ", last_entry)
+    short_code = call_application.shortcode 
+    
+    chunk_size = int(call_application.chunk)
+    skip_to = int(call_application.skip_to)
+
+    last_entry = int(last_roll.replace(short_code, ""))
+    if last_entry % chunk_size == 0 :
+        print("chunk size got, skipping to next")
+        print("last_entry, skipto, divide", last_entry, skip_to, last_entry//skip_to)
+        new_roll = ((last_entry // skip_to) + 1) * skip_to + 1
+    else:
+        new_roll = last_entry + 1
+
+    roll_number = short_code + str(new_roll).zfill(4)
+    print(roll_number)
+    return roll_number  
 # def merge_pdf(files):
 #     mem_pdf = BytesIO()
 #     merger = PdfFileMerger()

@@ -13,5 +13,9 @@ class CallForApplication(models.Model):
     start_date = models.DateField(blank=False, null=False)
     end_date = models.DateField(blank=False, null=False)
     shortcode = models.CharField(max_length=20, blank=False, null=False)
-
-    
+    chunk = models.IntegerField(null=True, blank=True)
+    skip_to = models.IntegerField(default=100)
+    exam_date = models.CharField(max_length=100, null=True, blank=True)
+    written_exam_time = models.CharField(max_length=100, null=True, blank=True )
+    viva_voce_time = models.CharField(max_length=100, null=True, blank=True)
+ 
