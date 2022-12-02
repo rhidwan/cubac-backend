@@ -377,7 +377,7 @@ class Command(BaseCommand):
                     print(test)
                     ts = TestScore.objects.get_or_create(user=user_new, **test)
                     
-            transaction = Transaction.objects.create(
+            transaction = Transaction.objects.get_or_create(
                                 payment_type="Manual", transaction_method="Bkash", amount='500',
                                  transaction_from=row[matched_index["transaction_from"]], transaction_id=row[matched_index["transaction_id"]],
                                  transaction_time=dateutil.parser.parse(row[matched_index["transaction_time"]]).date(),
