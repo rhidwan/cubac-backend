@@ -48,8 +48,8 @@
                         <a href="{% url 'generate_admit_card' application.id%}" class="dropdown-item">Generate Admit Card</a>
                         {% endif %}
 
-                        {% if application.transaction %}
-                        <a href="{% url 'generate_application_form' application.id%}" class="dropdown-item">Generate Application form</a>
+                        {% if request.user.is_staff and application.transaction %}
+                          <a href="{% url 'generate_application_form' application.id%}" class="dropdown-item">Generate Application form</a>
                         {% endif %}
                         
                     </div>

@@ -12,7 +12,7 @@ from call_applications.forms import CallForApplicationForm
 from call_applications.models import CallForApplication
 from functions.permissions import IsAdminOrReadOnly, IsOwnerOrAdminOrForbidden
 from datetime import datetime, timedelta
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
@@ -70,7 +70,7 @@ def admit_card(request):
             applications = []
             open_applications = CallForApplication.objects.all()
         else:
-            applications = Application.objects.filter(is_admit_ready=False, user=request.user) #@TODO CHANGE IT LATER
+            applications = Application.objects.filter(is_admit_ready=False, user=request.user) 
             open_applications = []
         return render(request, 'admit_card.html', {"applications": applications, "open_applications": open_applications})
  
@@ -84,7 +84,8 @@ def generate_admit_card(request, pk):
         application =  get_object_or_404(Application, pk=pk, user=request.user)
     
     if not application.seat:
-        return HttpResponse("Admit Card not ready yet")
+        messages.error(request, "Admit Card Not Available Yet")
+        return HttpResponse("Admit Card Not Available Yet")
 
     if request.method == "GET":
 
@@ -109,6 +110,7 @@ def generate_admit_card(request, pk):
 
 @login_required()
 def generate_bulk_admit_card(request, pk):
+
     applications = Application.objects.filter(call_for_application=pk).prefetch_related( 'transaction', 'call_for_application', 'seat' )
     
     filetype = request.GET.get('format', 'pdf')
@@ -116,12 +118,15 @@ def generate_bulk_admit_card(request, pk):
     if filetype == "zip":
         files = []
         for application in applications:
-            context = {
-                    "application": application,
-            }
-            pdf = render_pdf(request, 'pdf/admit_card.html' , context)
-            files.append((application.roll_no + ".pdf", pdf))
-        
+            if application.seat:
+                context = {
+                        "application": application,
+                }
+                pdf = render_pdf(request, 'pdf/admit_card.html' , context)
+                files.append((application.roll_no + ".pdf", pdf))
+            else:
+                continue
+
         full_zip_in_memory = generate_zip(files)
 
         response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
@@ -133,7 +138,7 @@ def generate_bulk_admit_card(request, pk):
 
          # template = get_template('pdf/callback_report.html')
         context = {
-                "applications": applications,
+                "applications": [x for x in applications if x.seat],
         }
 
         # html = template.render(context)
@@ -152,10 +157,11 @@ def generate_bulk_admit_card(request, pk):
 
 @login_required()
 def generate_application_form(request, pk):
+
     if request.user.is_staff:
         application = get_object_or_404(Application, pk=pk)
     else:
-        application =  get_object_or_404(Application, pk=pk, user=request.user)
+        raise Http404("Not Found")
    
     if request.method == "GET":
 
@@ -180,6 +186,9 @@ def generate_application_form(request, pk):
 
 @login_required()
 def generate_bulk_application_form(request, pk):
+    if not request.user.is_staff:
+        raise Http404("Not Found")
+    
     applications = Application.objects.filter(call_for_application=pk).prefetch_related( 'transaction', 'call_for_application', 'seat' )
     
     filetype = request.GET.get('format', 'pdf')

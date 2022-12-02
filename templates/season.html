@@ -16,11 +16,13 @@ Season | CUBAC
      </h4>
      <div class="d-flex justify-content-end align-items-center">
         {% if not request.user.is_staff %}
-      <a 
-      href="{% url 'apply_for_call_application' open_application.id %}"
-      class="btn btn-primary ">
-        Apply Now
-      </a>
+        {% if not applications %}
+        <a 
+        href="{% url 'apply_for_call_application' open_application.id %}"
+        class="btn btn-primary ">
+          Apply Now
+        </a>
+        {% endif %}
       {% else %}
       <div class="col-4 d-flex justify-content-end align-items-center gap-1">
         <a data-url="{% url 'edit_open_application_detail' open_application.id %}" data-bs-toggle="modal"

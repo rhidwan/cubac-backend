@@ -15,6 +15,10 @@ class EducationalBackground(models.Model):
     area_major = models.CharField(max_length=100, blank=False, null=False)
     division_class_cgpa = models.CharField(max_length=100, blank=True, null=True)
 
+    class Meta:
+        ordering = ('-passing_year',)
+
+
 class WorkExperience(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="work_experience")
@@ -24,6 +28,7 @@ class WorkExperience(models.Model):
     from_date = models.CharField(max_length=100, null=False, blank=False)
     to_date = models.CharField(max_length=100, null=True, blank=True)
     is_current = models.BooleanField()
+
 
 class AchievementMembership(models.Model):
     TYPE_CHOICE = (
@@ -36,6 +41,10 @@ class AchievementMembership(models.Model):
     achievement_type = models.CharField(max_length=20, choices=TYPE_CHOICE, null=False, blank=False)
     organization = models.CharField(max_length=250, null=False, blank=False)
     year = models.CharField(max_length=50, blank=False, null=False)
+
+    class Meta:
+        ordering = ('-year',)
+
 
 class TestScore(models.Model):
     EXAM_CHOICE= (
