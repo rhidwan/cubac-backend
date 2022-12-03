@@ -91,11 +91,16 @@ def generate_roll_no(call_application, latest_roll = None):
     if last_entry % chunk_size == 0 :
         print("chunk size got, skipping to next")
         print("last_entry, skipto, divide", last_entry, skip_to, last_entry//skip_to)
-        new_roll = ((last_entry // skip_to) + 1) * skip_to + 1
+        if last_entry == 0:
+            new_roll = 1
+        else:
+            new_roll = ((last_entry // skip_to) + 1) * skip_to + 1
+        # else:
+            # new_roll = 1
     else:
         new_roll = last_entry + 1
 
-    roll_number = short_code + str(new_roll).zfill(4)
+    roll_number = short_code + str(new_roll).zfill(3)
     print(roll_number)
     return roll_number  
 # def merge_pdf(files):
