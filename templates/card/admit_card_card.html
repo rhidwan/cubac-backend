@@ -16,7 +16,6 @@
             <div class="flex-grow-1">
               <h5 class="fw-semibold d-block">{{open_application.title}}</h5>
               <span class="font-weight-bold ">{% if open_application.is_open %}</span>Ending At: {{open_application.end_date}} {% else %} Starting at: {{open_application.start_date}} {% endif %}<br>
-              <span class="text-muted">Generation Might take some moment based on the number of page it will generate</span>
             </div>
             {% if request.user.is_staff %}
             <div class="mt-2">
@@ -27,6 +26,7 @@
             <div class="mt-2">
              <btn data-url="{% url 'generate_bulk_application_form_async' open_application.id %}" class="btn btn-outline-primary download-reports-button"> <i class="menu-icon tf-icons bx bx-download"></i>All Application Form</a>
             </div>
+
             <script>
                $('.download-reports-button').on('click', function(e) {
                 e.preventDefault();
@@ -110,6 +110,7 @@
             
             {% endif %}
             {% endif %}
+            <span class="text-muted mt-2">Caution: Generation Might take some moment.</span>
         </div>
 
       </div>
