@@ -24,8 +24,10 @@ from django.shortcuts import get_object_or_404, render
 from sslcommerz_lib import SSLCOMMERZ 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .utils import render_to_pdf, generate_zip, render_pdf, generate_roll_no
+from .utils import render_to_pdf, generate_zip, generate_roll_no
+from .tasks import render_pdf
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from background_task.models import Task 
 
 # Create your views here.
 #@todo permissions need to be revised
@@ -172,7 +174,8 @@ def generate_bulk_admit_card_async(request, pk):
     task.save()
     
     response = {"task_id": task.id}
-    
+
+    render_pdf(str(task.id), schedule=1, remove_existing_tasks=True) 
     return JsonResponse(response)
 
 @login_required()
@@ -192,6 +195,7 @@ def generate_bulk_application_form_async(request, pk):
     
     response = {"task_id": task.id}
     
+    render_pdf(str(task.id), schedule=1, remove_existing_tasks=True) 
     return JsonResponse(response)
     
 
@@ -729,8 +733,8 @@ def get_page_request_status(request):
             return JsonResponse(status=status.HTTP_200_OK, data=load_body)
         
         elif page_request.status == 'e':
-            return JsonResponse(
+            return JsonResponse(data={},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         else:
-            return JsonResponse(status=status.HTTP_202_ACCEPTED)
+            return JsonResponse(data={}, status=status.HTTP_202_ACCEPTED)

@@ -65,6 +65,3 @@ class PageRequest(models.Model):
     base_url = models.CharField(max_length=200, null=False, blank=False)
     context = models.CharField(max_length=200, null=False, blank=False)
     season = models.CharField(max_length=200, null=False, blank=False)
-
-    def __str__(self):
-        return f"{self.pk} ({self.url})"

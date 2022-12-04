@@ -42,10 +42,12 @@
                   .done(function pollAsyncResults(data) {
                     // bind pollAsyncResults to itself to avoid clashing with 
                     // the prior get request
+         
                     context: this
 
                     // see the URL setup for where this url came from
                     const pollAsyncUrl = `${task_status_url}?task_id=${data.task_id}`
+                    
                     $.get(pollAsyncUrl)
                       .done(function(asyncData, status, xhr) {
                         context: this
@@ -72,7 +74,7 @@
                           btn.html(' <i class="menu-icon tf-icons bx bx-loader"></i> Loading...')
                           // Call the function pollAsyncResults again after 
                           // waiting 5 seconds.
-                          setTimeout(function() { pollAsyncResults(data) }, 2000);
+                          setTimeout(function() { pollAsyncResults(data) }, 5000);
                         }
                       })
                       // see PollAsyncResultsView in View Setup. If the celery 

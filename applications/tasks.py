@@ -7,10 +7,13 @@ from weasyprint import HTML
 from django.core.files import File
 from .models import Application, PageRequest
 from django.template.loader import get_template
+import uuid
+from background_task import background
 
-def render_pdf(page):
-    # post_save fires after the save but before the transaction is commited
-    time.sleep(1)
+@background(schedule=None, name="render_pdf",  remove_existing_tasks=True)
+def render_pdf(page_id):
+    page = PageRequest.objects.get(id=uuid.UUID(page_id))
+    logger.info("Waiting 100 second")
     if page.status != page.Status.PENDING:
         return
     page.status = PageRequest.Status.GENERATING

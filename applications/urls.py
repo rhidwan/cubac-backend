@@ -20,6 +20,7 @@ urlpatterns = [
     path('application_form/generate/<pk>/', generate_application_form, name="generate_application_form"),
 
     path('task/status/', get_page_request_status, name="get_task_status"),
+    
     path('seat_plan/', seat_plan, name="seat_plan"),
     path('api/', api_application, name="api_application"),
     path('api/<pk>/', api_application_detail, name="api_application_detail"),

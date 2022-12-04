@@ -10,9 +10,9 @@ from .models import PageRequest
 logger = logging.getLogger(__name__)
 
 
-@receiver(post_save, sender=PageRequest)
-def call_pdf(sender, instance, created, **kwargs):
-    logger.info("New Page Created: %s", instance.pk)
-    if created:
-        logger.info("Creating pdf for instance %s", instance.pk)
-        render_pdf(instance)
+# @receiver(post_save, sender=PageRequest)
+# def call_pdf(sender, instance, created, **kwargs):
+#     logger.info("New Page Created: %s", instance.pk)
+#     if created:
+#         logger.info("Creating pdf for instance %s", instance.pk)
+#         render_pdf(instance)
