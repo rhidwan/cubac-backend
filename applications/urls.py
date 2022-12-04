@@ -12,12 +12,14 @@ urlpatterns = [
     
     path('admit_card/', admit_card, name="admit_card"),
     
+    path('application_form/generate/async/bulk/<pk>/',generate_bulk_application_form_async, name="generate_bulk_application_form_async" ),
+    path('admit_card/generate/async/bulk/<pk>/',generate_bulk_admit_card_async, name="generate_bulk_admit_card_async" ),
     path('admit_card/generate/bulk/<pk>/',generate_bulk_admit_card, name="generate_bulk_admit_card" ),
     path('admit_card/generate/<pk>/',generate_admit_card, name="generate_admit_card" ),
     path('application_form/generate/bulk/<pk>/', generate_bulk_application_form, name="generate_bulk_application_form"),
     path('application_form/generate/<pk>/', generate_application_form, name="generate_application_form"),
 
-
+    path('task/status/', get_page_request_status, name="get_task_status"),
     path('seat_plan/', seat_plan, name="seat_plan"),
     path('api/', api_application, name="api_application"),
     path('api/<pk>/', api_application_detail, name="api_application_detail"),

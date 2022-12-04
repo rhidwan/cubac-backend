@@ -47,3 +47,24 @@ class Application(models.Model):
     class Meta:
         unique_together= [['call_for_application', 'user']]
         ordering = ('roll_no',)
+
+class PageRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "P", "Pending"
+        GENERATING = "G", "Generating"
+        READY = "R", "Ready"
+        ERROR = "E", "Error"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
+    status = models.CharField(
+        max_length=2, choices=Status.choices, default=Status.PENDING
+    )
+    error_msg = models.CharField(max_length=128, blank=True, null=True)
+    pdf_file = models.FileField(upload_to=f"pdfs", null=True, blank=True)
+    template_src = models.CharField(max_length=200, null=False, blank=False)
+    base_url = models.CharField(max_length=200, null=False, blank=False)
+    context = models.CharField(max_length=200, null=False, blank=False)
+    season = models.CharField(max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.pk} ({self.url})"

@@ -16,16 +16,86 @@
             <div class="flex-grow-1">
               <h5 class="fw-semibold d-block">{{open_application.title}}</h5>
               <span class="font-weight-bold ">{% if open_application.is_open %}</span>Ending At: {{open_application.end_date}} {% else %} Starting at: {{open_application.start_date}} {% endif %}<br>
-
+              <span class="text-muted">Generation Might take some moment based on the number of page it will generate</span>
             </div>
             {% if request.user.is_staff %}
             <div class="mt-2">
-             <a href="{% url 'generate_bulk_admit_card' open_application.id %}" class="btn btn-outline-primary"> <i class="menu-icon tf-icons bx bx-download"></i>All Admit Card</a>
+             <btn data-url="{% url 'generate_bulk_admit_card_async' open_application.id %}" class="btn btn-outline-primary download-reports-button"> <i class="menu-icon tf-icons bx bx-download"></i>All Admit Card</a>
             </div>
+            <input type="hidden" id="taskStatusUrl" name="task" value="{% url 'get_task_status' %}" />
             
             <div class="mt-2">
-             <a href="{% url 'generate_bulk_application_form' open_application.id %}" class="btn btn-outline-primary"> <i class="menu-icon tf-icons bx bx-download"></i>All Application Form</a>
+             <btn data-url="{% url 'generate_bulk_application_form_async' open_application.id %}" class="btn btn-outline-primary download-reports-button"> <i class="menu-icon tf-icons bx bx-download"></i>All Application Form</a>
             </div>
+            <script>
+               $('.download-reports-button').on('click', function(e) {
+                e.preventDefault();
+                // see the URL Setup for where this url came from
+                const url = $(this).attr("data-url");
+                const task_status_url = $('#taskStatusUrl').attr('value');
+                const btn = $(this);
+                btn.attr("disabled", true);
+                const btn_text = $(this).html();
+                btn.html(' <i class="menu-icon tf-icons bx bx-loader"></i> Loading...');
+                // console.log(url)
+                $.get(url)
+                  .done(function pollAsyncResults(data) {
+                    // bind pollAsyncResults to itself to avoid clashing with 
+                    // the prior get request
+                    context: this
+
+                    // see the URL setup for where this url came from
+                    const pollAsyncUrl = `${task_status_url}?task_id=${data.task_id}`
+                    $.get(pollAsyncUrl)
+                      .done(function(asyncData, status, xhr) {
+                        context: this
+                        // if the status doesn't respond with 202, that means 
+                        // that the task finished successfully
+                        if (xhr.status !== 202) {
+                          // stop making get requests to pollAsyncResults
+                          clearTimeout(pollAsyncResults);
+                          // to download - create an anchor element and
+                          // simulate a click
+                          const a = document.createElement('a');
+                          document.body.appendChild(a);
+                          a.style='display: none';
+                          a.href=asyncData.location;
+                          a.download=asyncData.filename;
+                          a.click();
+                          // change the button back to normal and hide the     
+                          // overlay
+                          btn.html(btn_text);
+                          btn.attr("disabled", false);
+                        }
+                        // async task still processing
+                        else {
+                          btn.html(' <i class="menu-icon tf-icons bx bx-loader"></i> Loading...')
+                          // Call the function pollAsyncResults again after 
+                          // waiting 5 seconds.
+                          setTimeout(function() { pollAsyncResults(data) }, 2000);
+                        }
+                      })
+                      // see PollAsyncResultsView in View Setup. If the celery 
+                      // task fails, and returns a JSON blob with status_code 
+                      // 500, PollAsyncResultsView returns a 500 response, 
+                      // which would indicate that the task failed
+                      .fail(function(xhr, status, error) {
+                        // stop making get requests to pollAsyncResults
+                        clearTimeout(pollAsyncResults);
+                        // add a message, modal, or something to show the user 
+                        // that there was an error the error in this case 
+                        // would be related to the asynchronous task's
+                        // error message
+                      })
+                  })
+                  .fail(function(xhr, status, error) {
+                    // add a message, modal, or something to show the user 
+                    // that there was an error
+                    // The error in this case would be related to the main 
+                    // function that makes a request to start the async task
+                  })
+              })
+            </script>
             {% else %}
             {% if application.seat %}
             <div class="mt-2">

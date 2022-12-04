@@ -1,3 +1,4 @@
+import asyncio
 from collections import namedtuple
 from subprocess import call
 from django.conf import settings
@@ -7,7 +8,7 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from applications.forms import TransactionForm
 from applications.serializers import ApplicationSerializer
-from applications.models import Application, Seat, Transaction
+from applications.models import Application, Seat, PageRequest, Transaction
 from call_applications.forms import CallForApplicationForm
 from call_applications.models import CallForApplication
 from functions.permissions import IsAdminOrReadOnly, IsOwnerOrAdminOrForbidden
@@ -107,7 +108,6 @@ def generate_admit_card(request, pk):
             return response
         return HttpResponse("Not found")
 
-
 @login_required()
 def generate_bulk_admit_card(request, pk):
 
@@ -153,6 +153,47 @@ def generate_bulk_admit_card(request, pk):
             response['Content-Disposition'] = content
             return response
         return HttpResponse("Not found")
+
+
+
+@login_required()
+def generate_bulk_admit_card_async(request, pk):
+
+    # applications = Application.objects.filter(call_for_application=pk).prefetch_related( 'transaction', 'call_for_application', 'seat' )
+    # filename = "admit_card_%s.pdf" %(applications[0].call_for_application.title)
+    
+    # template = get_template('pdf/callback_report.html')
+    # context = {
+    #         "applications": [x for x in applications if x.seat][3],
+    # }
+    base_url = request.build_absolute_uri('/')
+
+    task = PageRequest(season=pk, template_src='pdf/admit_card_bulk.html', base_url=base_url, context="admit_card_all" )
+    task.save()
+    
+    response = {"task_id": task.id}
+    
+    return JsonResponse(response)
+
+@login_required()
+def generate_bulk_application_form_async(request, pk):
+
+    # applications = Application.objects.filter(call_for_application=pk).prefetch_related( 'transaction', 'call_for_application', 'seat' )
+    # filename = "admit_card_%s.pdf" %(applications[0].call_for_application.title)
+    
+    # template = get_template('pdf/callback_report.html')
+    # context = {
+    #         "applications": [x for x in applications if x.seat][3],
+    # }
+    base_url = request.build_absolute_uri('/')
+
+    task = PageRequest(season=pk, template_src='pdf/application_form_bulk.html', base_url=base_url, context="application_form_all" )
+    task.save()
+    
+    response = {"task_id": task.id}
+    
+    return JsonResponse(response)
+    
 
 
 @login_required()
@@ -661,3 +702,35 @@ def seat_plan_detail(request, pk):
 
     messages.success(request, "Failed to generate seat plan")
     return JsonResponse({"status": "error", "msg": "Something is Wrong"}, status=201)
+
+def get_page_request_status(request):
+    """
+    API endpoint that returns whether an Async job is finished, and 
+    what to do with the job.
+    Once a related Async task finishes, it saves a JSON blob to 
+    AsyncResults table. PollAsyncResultsView looks for a JSON blob 
+    associated with the given task id and returns 202 Accepted 
+    until it finds one.
+    
+    The JSON blob looks like the below
+    { status_code: 200, 
+        location: download url, 
+        filename: download file name } 
+    or if there was an error processing the task,
+    { status_code: 500, error_message: error message}
+    """
+    pk = request.GET.get('task_id', None)
+    page_request = PageRequest.objects.get(id=pk)
+
+    if page_request:
+        print(page_request.status)
+        if page_request.status == 'R':
+            load_body = {"status": page_request.status, "location": page_request.pdf_file.url, "filename": page_request.pdf_file.name}
+            return JsonResponse(status=status.HTTP_200_OK, data=load_body)
+        
+        elif page_request.status == 'e':
+            return JsonResponse(
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        else:
+            return JsonResponse(status=status.HTTP_202_ACCEPTED)

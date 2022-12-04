@@ -1,4 +1,5 @@
 from io import BytesIO
+import json
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.conf import settings
@@ -52,7 +53,8 @@ def render_pdf(request, template_src, context_dict={} ):
     pdf_file = HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
 
     return pdf_file
-    
+
+
 def generate_zip(files):
     mem_zip = BytesIO()
 
