@@ -32,27 +32,7 @@ random_words = ["dingmaul","daymares","blipping","uncasked","pickpole",
         ]
 
 static_proxies = [
-    {"https": "http://vqdytdhy:tctgyaae8lc2@45.87.243.225:6227"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@95.164.135.47:6580"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@192.186.151.141:8642"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@69.58.9.16:7086"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@170.244.92.70:8630"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@45.86.66.217:6470"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@171.22.133.7:7266"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@144.168.145.8:6056"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@185.101.169.253:6797"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@138.128.69.4:8073"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@94.131.81.81:6221"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@104.144.3.98:6177"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@23.236.183.33:8604"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@144.168.140.29:8100"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@23.236.183.152:8723"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@209.127.183.32:8130"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@107.152.190.209:7230"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@104.223.223.77:6662"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@84.21.189.226:5873"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@104.144.147.150:8184"},
-    {"https": "http://vqdytdhy:tctgyaae8lc2@107.152.170.63:9114"},
+    
 ]
 
 
